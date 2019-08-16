@@ -25,6 +25,18 @@ public class Imagefile {
 		return this.name;
 	}
 	
+	public int getHeight(){
+		return this.height;
+	}
+	
+	public int getWidth(){
+		return this.width;
+	}
+	
+	public ArrayList<Pix> getPixArray(){
+		return this.pixArray;
+	}
+	
 	// checks if a given pixel is in a given shape
 	public boolean pixIsInShape(Pix pix, Shape shape){
 		for(int pixInx = 0; pixInx < shape.getPixArray().size(); pixInx++){
@@ -58,13 +70,13 @@ public class Imagefile {
 	
 	// checks if two given pixels are within 1 pixel radius of each other
 	public boolean pixsAreAdjacent(Pix pix1, Pix pix2){
-		int pix2xLow = pix2.getCoords().get("x") - 1;
-		int pix2xHigh = pix2.getCoords().get("x") + 1;
-		int pix2yLow = pix2.getCoords().get("y") - 1;
-		int pix2yHigh = pix2.getCoords().get("y") + 1;
+		int pix2xLow = pix2.getCoord().getX() - 1;
+		int pix2xHigh = pix2.getCoord().getX() + 1;
+		int pix2yLow = pix2.getCoord().getY() - 1;
+		int pix2yHigh = pix2.getCoord().getY() + 1;
 		
-		if(pix1.getCoords().get("x") >= pix2xLow && pix1.getCoords().get("x") <= pix2xHigh){
-			if(pix1.getCoords().get("y") >= pix2yLow && pix1.getCoords().get("y") <= pix2yHigh){
+		if(pix1.getCoord().getX() >= pix2xLow && pix1.getCoord().getX() <= pix2xHigh){
+			if(pix1.getCoord().getY() >= pix2yLow && pix1.getCoord().getY() <= pix2yHigh){
 				return true;
 			}
 		}
@@ -116,10 +128,10 @@ public class Imagefile {
 	
 	// checks if given pixel is at image edge
 	public boolean pixIsEdge(Pix pix){
-		if(pix.getCoords().get("x") == 0 || pix.getCoords().get("x") == this.width){
+		if(pix.getCoord().getX() == 0 || pix.getCoord().getX() == this.width){
 			return true;
 		}
-		if(pix.getCoords().get("y") == 0 || pix.getCoords().get("y") == this.height){
+		if(pix.getCoord().getY() == 0 || pix.getCoord().getY() == this.height){
 			return true;
 		}
 		return false;

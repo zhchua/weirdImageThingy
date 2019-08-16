@@ -12,7 +12,7 @@ public class Shape {
 			return false;
 		}
 		for(int i = 0; i < pixArray.size(); i++){
-			pixArray.get(i).setAlpha(a);
+			pixArray.get(i).getColour().setA(a);
 		}
 		return true;
 	}
@@ -23,5 +23,9 @@ public class Shape {
 	
 	public void setPixIntoShape(Pix pix){
 		this.pixArray.add(pix);
+	}
+	
+	public boolean deletePixFromShape(Pix pix){
+		return pixArray.remove(pix);
 	}
 }
