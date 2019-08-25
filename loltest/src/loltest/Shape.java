@@ -21,6 +21,16 @@ public class Shape {
 		return this.pixArray;
 	}
 	
+	// checks if pix is in this shape
+	public boolean pixIsInShape(Pix pix){
+		for(int pixInx = 0; pixInx < getPixArray().size(); pixInx++){
+			if(pix == getPixArray().get(pixInx)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void setPixIntoShape(Pix pix){
 		this.pixArray.add(pix);
 	}

@@ -10,6 +10,11 @@ public class Pix {
 	private Colour colour;
 	private Coord coord;
 	
+	public Pix(Colour colour, Coord coord){
+		this.colour = colour;
+		this.coord = coord;
+	}
+	
 	public Colour getColour(){
 		return this.colour;
 	}

@@ -7,6 +7,13 @@ public class Colour {
 	private float b;
 	private float a;
 	
+	public Colour(float r, float g, float b, float a){
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		this.a = a;
+	}
+	
 	public void setR(float r){
 		this.r = r;
 	}

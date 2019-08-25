@@ -5,6 +5,10 @@ public class Coord {
 	private int x;
 	private int y;
 	
+	public Coord(int x, int y){
+		setCoord(x, y);
+	}
+	
 	public int getX(){
 		return this.x;
 	}
