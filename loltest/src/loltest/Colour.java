@@ -7,7 +7,7 @@ public class Colour {
 	private float b;
 	private float a;
 	
-	public Colour(float r, float g, float b, float a){
+	public Colour(float a, float r, float g, float b){
 		this.r = r;
 		this.g = g;
 		this.b = b;

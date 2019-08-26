@@ -20,11 +20,18 @@ public class Testmain {
 		imgF2.generateImageFromImageObj(imgF2.getImageObj());
 		imgF2.saveFile();
 		
-		// SAVING IS CURRENTLY BUGGED
-		// COLOUR ASSIGNMENT IS INCORRECT
 		for(int i = 0; i < imgF.getImageObj().getPixArray().size(); i++){
+			System.out.println("\n");
+			System.out.println(imgF.getImage().getRGB(0, 0));
+			System.out.println(imgF2.getImage().getRGB(0, 0));
+			System.out.println("\n");
 			System.out.println(Integer.toBinaryString(imgF.getImage().getRGB(0, 0)));
 			System.out.println(Integer.toBinaryString(imgF2.getImage().getRGB(0, 0)));
+		
+			System.out.println(imgF.getColoursAsBits(imgF.getImageObj().getPixArray().get(i)));
+			System.out.println(imgF2.getColoursAsBits(imgF.getImageObj().getPixArray().get(i)));
+		}
+
 //			
 //		
 //			System.out.print(imgF.getImageObj().getPixArray().get(i).getCoord().
@@ -59,6 +66,6 @@ public class Testmain {
 //			System.out.print(imgF2.getImageObj().getPixArray().get(i).getColour().
 //					getB());
 //			System.out.print("\n");
-		}
 	}
 }
+

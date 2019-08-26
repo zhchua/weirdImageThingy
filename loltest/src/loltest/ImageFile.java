@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -138,9 +139,8 @@ public class ImageFile {
 	 * @param p
 	 * @return
 	 */
-	public static int pow(int n, int p){
-		// cant fucking believe i need to write this
-		System.out.println("pow");
+	public int pow(int n, int p){
+		// cant believe i needed to write this
 		if(p == 0){
 			return 1;
 		}
@@ -159,36 +159,36 @@ public class ImageFile {
 	 * @param num
 	 * @return
 	 */
-	public static ArrayList<Integer> getPower(int num){
-		System.out.println("getPower");
+	public ArrayList<Integer> getPower(Pix pix){
 		ArrayList<Integer> bits = new ArrayList<Integer>();
+		int col = 0;
+		int[] colours = {(int) pix.getColour().getA()
+				,(int) pix.getColour().getR()
+				,(int) pix.getColour().getG()
+				,(int) pix.getColour().getB()};
+		
 		// 128, 64, 32, 16, 8, 4, 2, 1
-		for( int i = 7; i >= 0 ; i--){
-			if(num / pow(2,i) >= 1){
-				bits.add(1);
-				num = num - pow(2,i);
+		for(int clrInx = 0 ; clrInx < colours.length; clrInx++){
+			col = colours[clrInx];
+			for( int i = 7; i >= 0 ; i--){
+				if(col / pow(2,i) >= 1){
+					bits.add(1);
+					col = col - pow(2,i);
+				}
+				else bits.add(0);
 			}
-			else bits.add(0);
 		}
 		return bits;
 	}
 	
-	/** Get an ArrayList representing the bit pattern of the Alpha Channel (8-bits)
+	/** Get an ArrayList representing the bit pattern of the 32-bit integer colours
 	 * 
 	 * @param a
 	 * @return
 	 */
-	public static ArrayList<Integer> getAinBitForm(int a){
-		System.out.println("getAinBitForm");
-		return getPower(a);
-	}
-	
-	
-	public static void main(String[] args){
-		ArrayList<Integer> a = getAinBitForm(55);
-		for(int i = 0; i<a.size(); i++){
-			System.out.print(a.get(i));
-		}
+	public ArrayList<Integer> getColoursAsBits(Pix pix){
+		// ffs this is a dumb idea
+		return getPower(pix);
 	}
 	
 	/** Sets a pixel of imageFile using info (colour, coord) from a pix of imageObj
@@ -196,29 +196,20 @@ public class ImageFile {
 	 * @param pix
 	 */
 	public void setImageFilePixByImageObjPix(Pix pix){
-/*		int rgb = ((int) pix.getColour().getA() <<24) | 
-				((int) pix.getColour().getR()<<16) | 
-				((int) pix.getColour().getG()<<8) | (int) pix.getColour().getB();*/
-		int rgb = -1;
-		System.out.println(Integer.toBinaryString(rgb));
+/*		
+		this.image.setRGB(pix.getCoord().getX(), pix.getCoord().getY(), rgb);*/
 		
-		System.out.println(Integer.toBinaryString((int) pix.getColour().getA()));
-		rgb = ((int)pix.getColour().getA() << 24) & rgb;
-		System.out.println(Integer.toBinaryString(rgb));
-	
-		System.out.println(Integer.toBinaryString((int) pix.getColour().getR()));
-		rgb = (rgb & ~(0xFF << 16)) | ((int)pix.getColour().getR() << 16);
-		System.out.println(Integer.toBinaryString(rgb));
+		StringBuilder argbStrBld = new StringBuilder();
+		for(int i = 0; i < getPower(pix).size(); i++){
+			argbStrBld.append(getPower(pix).get(i));
+		}
+		String argbStr = argbStrBld.toString();
+		//int argb = Integer.parseInt(argbStr, 2);
+		int argb = (int) Long.parseLong(argbStr, 2);
+		//(int)Long.parseLong(s, 2)
 		
-		System.out.println(Integer.toBinaryString((int) pix.getColour().getG()));
-		rgb = (rgb & ~(0xFF << 8)) | ((int)pix.getColour().getG() << 8);
-		System.out.println(Integer.toBinaryString(rgb));
-		
-		System.out.println(Integer.toBinaryString((int) pix.getColour().getB()));
-		rgb = (rgb & ~(0xFF)) | ((int)pix.getColour().getB());
-		System.out.println(Integer.toBinaryString(rgb));
-		
-		this.image.setRGB(pix.getCoord().getX(), pix.getCoord().getY(), rgb);
+		this.image.setRGB(pix.getCoord().getX(), pix.getCoord().getY(), argb);
+
 	}
 	
 	/** Populates a new imageFile's pixels with pixel data from imageObj
@@ -226,7 +217,8 @@ public class ImageFile {
 	 * @param imageObj
 	 */
 	public void generateImageFromImageObj(ImageObj imageObj){
-		this.image = new BufferedImage(imageObj.getWidth(), imageObj.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		this.image = new BufferedImage(imageObj.getWidth(), imageObj.getHeight()
+				, BufferedImage.TYPE_INT_ARGB);
 		for(int pixInx = 0; pixInx < imageObj.getPixArray().size(); pixInx++){
 			setImageFilePixByImageObjPix(imageObj.getPixArray().get(pixInx));
 		}
