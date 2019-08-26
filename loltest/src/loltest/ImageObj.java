@@ -37,6 +37,9 @@ public class ImageObj {
 	}
 	
 	public void setPixIntoPixArray(Pix pix){
+		if(pixArray == null){
+			this.pixArray = new ArrayList<Pix>();
+		}
 		pixArray.add(pix);
 	}
 	
@@ -99,6 +102,9 @@ public class ImageObj {
 	}
 	
 	public void autoassignPixToShape(Pix pix){
+		if(this.shapeList == null){
+			this.shapeList = new ArrayList<Shape>();
+		}
 		for(int checkPixInx = 0; checkPixInx < pixArray.size(); checkPixInx++){
 			if(pixsSameShape(pixArray.get(checkPixInx),pix)){
 				if(pixIsAlreadyInShapes(pixArray.get(checkPixInx))){

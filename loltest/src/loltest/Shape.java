@@ -32,6 +32,9 @@ public class Shape {
 	}
 	
 	public void setPixIntoShape(Pix pix){
+		if(this.pixArray == null){
+			this.pixArray = new ArrayList<Pix>();
+		}
 		this.pixArray.add(pix);
 	}
 	

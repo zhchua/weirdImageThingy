@@ -90,7 +90,7 @@ public class ImageFile {
 		imageObj.setPixIntoPixArray(new Pix( new Colour(a,r,g,b), new Coord(x,y)));
 	}
 	
-	public void generateImageObjDetails(){
+	public void generateImageObjDetailsFromImage(){
 		for(int checkX = 0; checkX < this.getWidth(); checkX++){
 			for(int checkY = 0; checkY < this.getHeight(); checkY++){
 				generatePixForImageObj(image.getRGB(checkX, checkY), checkX, checkY);
@@ -104,8 +104,23 @@ public class ImageFile {
 			return;
 		}
 		else this.imageObj = new ImageObj(this.width, this.height);
-		generateImageObjDetails();
+		generateImageObjDetailsFromImage();
 	}
 	
+	// sets imagefile pixel by pixel using info from imageobj pix
+	public void setImageFilePixByImageObjPix(Pix pix){
+		int rgb = ((int) pix.getColour().getA() <<24) | 
+				((int) pix.getColour().getR()<<16) | 
+				((int) pix.getColour().getG()<<8) | (int) pix.getColour().getB();
+		this.image.setRGB(pix.getCoord().getX(), pix.getCoord().getY(), rgb);
+	}
+	
+	// populates a new imagefile with data from imageobj
+	public void generateImageFromImageObj(ImageObj imageObj){
+		this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		for(int pixInx = 0; pixInx < imageObj.getPixArray().size(); pixInx++){
+			setImageFilePixByImageObjPix(imageObj.getPixArray().get(pixInx));
+		}
+	}
 	
 }
