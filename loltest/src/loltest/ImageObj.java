@@ -140,8 +140,12 @@ public class ImageObj {
 		return false;
 	}
 	
-	// checks if given shape is at image edge
-	// does so by checking if given shape has pixel at image edge
+	/** Checks if given shape is at image edge
+	 * Does so by checking if given shape has pixel at image edge
+	 * 
+	 * @param shape
+	 * @return
+	 */
 	public boolean shapeIsImgEdge(Shape shape){
 		for(int pixInx = 0; pixInx<shape.getPixArray().size(); pixInx++){
 			if(pixIsImgEdge(shape.getPixArray().get(pixInx))){
@@ -151,7 +155,9 @@ public class ImageObj {
 		return false;
 	}
 	
-	// replaces existing shapeList with new shapeList without edge shapes
+	/** Replaces existing shapeList with new shapeList without edge shapes
+	 * 
+	 */
 	public void cullImgEdgeShapes(){
 		ArrayList<Shape> newShapeList = new ArrayList<Shape>();
 		for(int shapeInx = 0; shapeInx < shapeList.size(); shapeInx++){
@@ -162,6 +168,11 @@ public class ImageObj {
 		this.shapeList = newShapeList;
 	}
 	
+	/**	Returns pix located at given coord.
+	 * 
+	 * @param coord
+	 * @return
+	 */
 	public Pix getPixByCoord(Coord coord){
 		for(int pixInx = 0; pixInx < pixArray.size(); pixInx++){
 			if(pixArray.get(pixInx).getCoord() == coord){
@@ -171,10 +182,20 @@ public class ImageObj {
 		return null;
 	}
 	
+	/** Removes given shape from shapeList.
+	 * 
+	 * @param shape
+	 * @return
+	 */
 	public boolean cullShape(Shape shape){
 		return shapeList.remove(shape);
 	}
 	
+	/** Checks if given pix is adjacent to another pix of same colour.
+	 * 
+	 * @param pix
+	 * @return
+	 */
 	public boolean pixIsAdjacentToSameColour(Pix pix){
 		int pixXLow = pix.getCoord().getX() - 1;
 		int pixXHigh = pix.getCoord().getX() + 1;
