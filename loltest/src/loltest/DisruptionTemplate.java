@@ -7,45 +7,31 @@ import java.util.HashMap;
 // where white 255 is the background and black 0 is the disruption target
 // and disruption target is a contiguous black shape
 
+// actual code logic to use all shapes as "targets"
+// and calculate across all shapes
 public class DisruptionTemplate extends ImageObj {
 	
-	private ArrayList<Pix> targetEdges;
+	private ArrayList<DisruptionStat> disruptionStats;
 	
-	private Shape targetShape;
-	
-	private HashMap<Float, Float> disruptionStats;
-	
-	private Colour white;
-	
-	private Colour black;
+	private int angleInterval;
 	
 	public DisruptionTemplate(int width, int height){
 		super(width, height);
-		this.white = new Colour((float) 255,(float)255,(float)255,(float) 255);
-		this.black = new Colour((float)0,(float)0,(float)0, (float) 0);
 	}
 	
-	public HashMap<Float, Float> getDisruptionStats(){
+	public ArrayList<DisruptionStat> getDisruptionStats(){
 		return this.disruptionStats;
 	}
 	
-	// creates target shape from arraylist of all existing shapes
-	// determines target shape by looking for black shape
-	// prerequisite: shapes must be generated and there should be more than one black shape
-	public boolean generateTargetShape(){
-		if(this.getShapeList() == null){
-			return false;
-		}
-		for(int shapeInx = 0; shapeInx < this.getShapeList().size(); shapeInx++){
-			if(this.getShapeList().get(shapeInx).getPixArray().get(0).getColour() 
-					== black){
-				this.targetShape = this.getShapeList().get(shapeInx);
-				return true;
-			}
-		}
-		return false;
+	public void setAngleInterval(int angleInterval){
+		this.angleInterval = angleInterval;
 	}
 	
+	public int getAngleInterval(){
+		return this.angleInterval;
+	}
+	
+	/*
 	// randomly searches for an edge pixel
 	// edge pixel being adjacent to WHITE
 	public Coord getStartPoint(){
@@ -58,7 +44,76 @@ public class DisruptionTemplate extends ImageObj {
 		}
 		return null;
 	}
+	*/
+
+	/** Returns the angle that should be checked currently.
+	 * 
+	 * @param count
+	 * @return
+	 */
+	public float getAngleAtCount(int count){
+		if(angleInterval == 0){
+			return 0;
+		}
+		return (float)count * (((float)360)/((float)angleInterval));
+	}
 	
-	public void generateDisruptionStats(){	
+	/** 
+	 * 
+	 * @param shape
+	 * @param pix
+	 * @param angle
+	 * @return
+	 */
+	public int getDistanceToOtherEdge(Shape shape, Pix pix, float angle){
+		
+	}
+	
+	/**  Generates single disruptionStat by drawing line from origin (pix)
+	 *  in the direction specified by angle.
+	 * 
+	 * @param shape
+	 * @param pix
+	 * @param angle
+	 */
+	public void generateDisruptionStatsForAngle(Shape shape, Pix pix, float angle){
+		
+	}
+	
+	/** Populates disruptionStats list by iterating through every angle of the 
+	 * desired interval, at the given pix.
+	 * 
+	 * @param shape
+	 * @param pix
+	 */
+	public void generateDisruptionStatsForPix(Shape shape, Pix pix){
+		for(int intervalCount = 0; intervalCount < angleInterval; intervalCount++){
+			generateDisruptionStatsForAngle(shape, pix, getAngleAtCount(intervalCount));
+		}
+	}
+	
+	/** Populates disruptionStats list by iterating through every edge pix 
+	 * in given shape.
+	 * 
+	 * @param shape
+	 */
+	public void generateDisruptionStatsForShape(Shape shape){
+		for(int pixInx = 0; pixInx < shape.getPixArray().size(); pixInx++){
+			if(shape.pixIsShapeEdge(shape.getPixArray().get(pixInx))){
+				generateDisruptionStatsForPix(shape, shape.getPixArray().get(pixInx));
+			}
+		}
+	}
+	
+	/**	Populates disruptionStats list by iterating through every shape.
+	 * 
+	 */
+	public void generateDisruptionStatsForAllShapes(){
+		if(this.disruptionStats == null){
+			this.disruptionStats = new ArrayList<DisruptionStat>();
+		}
+		for(int shapeInx = 0; shapeInx < this.getShapeList().size(); shapeInx++){
+			generateDisruptionStatsForShape(this.getShapeList().get(shapeInx));
+		}
 	}
 }

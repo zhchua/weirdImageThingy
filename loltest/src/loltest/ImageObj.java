@@ -253,5 +253,4 @@ public class ImageObj {
 		}
 		return false;
 	}
-	
 }
