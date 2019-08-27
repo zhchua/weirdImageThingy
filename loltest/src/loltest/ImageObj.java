@@ -36,6 +36,10 @@ public class ImageObj {
 		return this.shapeList;
 	}
 	
+	/** Insert pix into pixArray.
+	 * 
+	 * @param pix
+	 */
 	public void setPixIntoPixArray(Pix pix){
 		if(pixArray == null){
 			this.pixArray = new ArrayList<Pix>();
@@ -43,7 +47,11 @@ public class ImageObj {
 		pixArray.add(pix);
 	}
 	
-	// checks if a given pixel is in any shapes in image shapelist
+	/** Checks if a given pixel is in any shapes in shapeList.
+	 * 
+	 * @param pix
+	 * @return
+	 */
 	public boolean pixIsAlreadyInShapes(Pix pix){
 		if(shapeList == null){
 			return false;
@@ -56,7 +64,12 @@ public class ImageObj {
 		return false;
 	}
 	
-	// checks if two given pixels are the same colour
+	/** Checks if two given pixels are the same colour.
+	 * 
+	 * @param pix1
+	 * @param pix2
+	 * @return
+	 */
 	public boolean pixsSameColour(Pix pix1, Pix pix2){
 		if(pix1.getColour() == pix2.getColour()){
 			return true;
@@ -64,7 +77,12 @@ public class ImageObj {
 		return false;
 	}
 	
-	// checks if two given pixels are within 1 pixel radius of each other
+	/** Checks if two given pixels are next to each other.
+	 * 
+	 * @param pix1
+	 * @param pix2
+	 * @return
+	 */
 	public boolean pixsAreAdjacent(Pix pix1, Pix pix2){
 		int pix2xLow = pix2.getCoord().getX() - 1;
 		int pix2xHigh = pix2.getCoord().getX() + 1;
@@ -79,7 +97,13 @@ public class ImageObj {
 		return false;
 	}
 	
-	// checks if two given pixels should belong to the same shape
+	/** Checks if two given pixels should belong to the same shape.
+	 * Calls same-colour checking and adjacency checking.
+	 * 
+	 * @param pix1
+	 * @param pix2
+	 * @return
+	 */
 	public boolean pixsSameShape(Pix pix1, Pix pix2){
 		if(pix1 != pix2 && pixsSameColour(pix1, pix2) && pixsAreAdjacent(pix1, pix2)){
 			return true;	
@@ -87,8 +111,12 @@ public class ImageObj {
 		return false;
 	}
 	
-	// returns the shape that a given pixel belongs to
-	// prerequisite: given pixel must already be assigned to a shape
+	/** Returns the shape that a given pixel belongs to.
+	 * Prerequisite: given pixel must already be assigned to a shape
+	 * 
+	 * @param pix
+	 * @return
+	 */
 	public Shape pixGetShape(Pix pix){
 		if(!pixIsAlreadyInShapes(pix)){
 			return null;
@@ -101,6 +129,11 @@ public class ImageObj {
 		return null;
 	}
 	
+	/** Sets pix into shape
+	 * If 2 pix rgb are equal and adjacent, is same shape
+	 * 
+	 * @param pix
+	 */
 	public void autoassignPixToShape(Pix pix){
 		if(this.shapeList == null){
 			this.shapeList = new ArrayList<Shape>();
@@ -119,8 +152,11 @@ public class ImageObj {
 		}
 	}
 	
-	// if 2 pix rgb are equal and adjacent, is same shape
-	// requires refactoring
+	/** Generate shapes for the shapeList by iterating through pixs. 
+	 * 
+	 * If pix is already in shape, pass
+	 * 
+	 */
 	public void pixelwiseGenerateShapes(){
 		for(int currentPixInx = 0; currentPixInx < pixArray.size(); currentPixInx++){
 			if(!pixIsAlreadyInShapes(pixArray.get(currentPixInx))){
@@ -129,7 +165,11 @@ public class ImageObj {
 		}
 	}
 	
-	// checks if given pixel is at image edge
+	/** Checks if given pixel is at image edge
+	 * 
+	 * @param pix
+	 * @return
+	 */
 	public boolean pixIsImgEdge(Pix pix){
 		if(pix.getCoord().getX() == 0 || pix.getCoord().getX() == this.width){
 			return true;

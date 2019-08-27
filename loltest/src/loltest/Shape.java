@@ -7,6 +7,11 @@ public class Shape {
 	private ArrayList<Pix> pixArray;
 	private ArrayList<Pix> verticeArray;
 	
+	/** Sets alpha channel of all pixs in shape to the specified value.
+	 * 
+	 * @param a
+	 * @return
+	 */
 	public boolean setAllAlpha(float a){
 		if(pixArray == null){
 			return false;
@@ -21,7 +26,11 @@ public class Shape {
 		return this.pixArray;
 	}
 	
-	// checks if pix is in this shape
+	/** Checks if given pix is in this shape
+	 * 
+	 * @param pix
+	 * @return
+	 */
 	public boolean pixIsInShape(Pix pix){
 		for(int pixInx = 0; pixInx < getPixArray().size(); pixInx++){
 			if(pix == getPixArray().get(pixInx)){
@@ -31,6 +40,10 @@ public class Shape {
 		return false;
 	}
 	
+	/** Inserts given pix into this shape. 
+	 * 
+	 * @param pix
+	 */
 	public void setPixIntoShape(Pix pix){
 		if(this.pixArray == null){
 			this.pixArray = new ArrayList<Pix>();
@@ -38,6 +51,11 @@ public class Shape {
 		this.pixArray.add(pix);
 	}
 	
+	/** Removes given pix from this shape.
+	 * 
+	 * @param pix
+	 * @return
+	 */
 	public boolean deletePixFromShape(Pix pix){
 		return pixArray.remove(pix);
 	}

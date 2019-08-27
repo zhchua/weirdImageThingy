@@ -36,7 +36,7 @@ public class Colour {
 		setB(b);
 	}
 	
-	public void setRGBA(float r, float g, float b, float a){
+	public void setARGB(float a, float r, float g, float b){
 		setR(r);
 		setG(g);
 		setB(b);
