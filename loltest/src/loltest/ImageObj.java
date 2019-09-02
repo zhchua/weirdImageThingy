@@ -64,39 +64,6 @@ public class ImageObj {
 		return false;
 	}
 	
-	/** Checks if two given pixels are the same colour.
-	 * 
-	 * @param pix1
-	 * @param pix2
-	 * @return
-	 */
-	public boolean pixsSameColour(Pix pix1, Pix pix2){
-		if(pix1.getColour() == pix2.getColour()){
-			return true;
-		}
-		return false;
-	}
-	
-	/** Checks if two given pixels are next to each other.
-	 * 
-	 * @param pix1
-	 * @param pix2
-	 * @return
-	 */
-	public boolean pixsAreAdjacent(Pix pix1, Pix pix2){
-		int pix2xLow = pix2.getCoord().getX() - 1;
-		int pix2xHigh = pix2.getCoord().getX() + 1;
-		int pix2yLow = pix2.getCoord().getY() - 1;
-		int pix2yHigh = pix2.getCoord().getY() + 1;
-		
-		if(pix1.getCoord().getX() >= pix2xLow && pix1.getCoord().getX() <= pix2xHigh){
-			if(pix1.getCoord().getY() >= pix2yLow && pix1.getCoord().getY() <= pix2yHigh){
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	/** Checks if two given pixels should belong to the same shape.
 	 * Calls same-colour checking and adjacency checking.
 	 * 
@@ -105,7 +72,7 @@ public class ImageObj {
 	 * @return
 	 */
 	public boolean pixsSameShape(Pix pix1, Pix pix2){
-		if(pix1 != pix2 && pixsSameColour(pix1, pix2) && pixsAreAdjacent(pix1, pix2)){
+		if(pix1 != pix2 && pix1.isSameColourAs(pix2) && pix1.isAdjacentTo(pix2)){
 			return true;	
 		}
 		return false;
@@ -246,7 +213,7 @@ public class ImageObj {
 			for(int checkY = pixYLow; checkY <= pixYHigh; checkY++){
 				Pix checkPix = getPixByCoord(new Coord(checkX, checkY));
 				if(pix != checkPix && pixsAreAdjacent(pix, checkPix) 
-						&& this.pixsSameColour(pix, checkPix)){
+						&& pix.getColour().isSameRGB(checkPix.getColour())){
 					return true;
 				}
 			}

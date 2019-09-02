@@ -3,14 +3,14 @@ package loltest;
 public class DisruptionStat {
 
 	private float length;
-	private float angle;
+	private Angle angle;
 	
-	public DisruptionStat(float angle, float length){
+	public DisruptionStat(Angle angle, float length){
 		this.length = length;
 		this.angle = angle;
 	}
 	
-	public void setAngle(float angle){
+	public void setAngle(Angle angle){
 		this.angle = angle;
 	}
 	
@@ -18,7 +18,7 @@ public class DisruptionStat {
 		this.length = length;
 	}
 	
-	public float getAngle(){
+	public Angle getAngle(){
 		return this.angle;
 	}
 	

@@ -56,4 +56,53 @@ public class Colour {
 	public float getA(){
 		return this.a;
 	}
+	
+	/** Determines equality between two floats to 0.001% precision of either value
+	 * 
+	 * @param fl1
+	 * @param fl2
+	 * @return
+	 */
+	private boolean flEq(float fl1, float fl2){
+		float errMar1 = (float) ((0.001) * (fl1/100));
+		float errMar2 = (float) ((0.001) * (fl2/100));
+		
+		if(Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2){
+			return true;
+		}
+		return false;
+	}
+	
+	private void _________________________________________(){}
+	
+	/** Checks if given colour has the same ARGB as this colour.
+	 * Calls flEq
+	 * 
+	 * @param otherColour
+	 * @return
+	 */
+	public boolean isSameARGB(Colour otherColour){
+		if(flEq(this.getA(), otherColour.getA())
+				&& flEq(this.getR(), otherColour.getR())
+				&& flEq(this.getG(), otherColour.getG())
+				&& flEq(this.getB(), otherColour.getB())){
+			return true;
+		}
+		return false;
+	}
+	
+	/** Checks if given colour has same RGB (excludes A) as this colour.
+	 * Calls flEq.
+	 * 
+	 * @param otherColour
+	 * @return
+	 */
+	public boolean isSameRGB(Colour otherColour){
+		if(flEq(this.getR(), otherColour.getR())
+				&& flEq(this.getG(), otherColour.getG())
+				&& flEq(this.getB(), otherColour.getB())){
+			return true;
+		}
+		return false;
+	}
 }

@@ -52,7 +52,7 @@ public class DisruptionTemplate extends ImageObj {
 	 * @param fl2
 	 * @return
 	 */
-	public boolean flEq(float fl1, float fl2){
+	private boolean flEq(float fl1, float fl2){
 		float errMar1 = (float) ((0.001) * (fl1/100));
 		float errMar2 = (float) ((0.001) * (fl2/100));
 		
@@ -68,7 +68,7 @@ public class DisruptionTemplate extends ImageObj {
 	 * @param fl2
 	 * @return
 	 */
-	public boolean flEq(float fl1, float fl2, float pres){
+	private boolean flEq(float fl1, float fl2, float pres){
 		float errMar1 = (float) ((pres) * (fl1/100));
 		float errMar2 = (float) ((pres) * (fl2/100));
 		
@@ -81,111 +81,22 @@ public class DisruptionTemplate extends ImageObj {
 	/** Unused function in code to space getters&setters from actual functions
 	 * 
 	 */
-	private void SPACER(){}
+	private void _________________________________________(){}
 
 	/** Returns the angle that should be checked currently.
 	 * 
 	 * @param count
 	 * @return
 	 */
-	public float getAngleAtCount(int count){
+	public Angle getAngleAtCount(int count){
 		if(angleInterval == 0){
-			return 0;
+			return new Angle(0);
 		}
-		return (float)count * (((float)360)/((float)angleInterval));
+		return new Angle((float)count * (((float)360)/((float)angleInterval)));
 	}
 	
-	/** Calculates the appropriate change in Y per unit X traversed
-	 * i.e. find vertical component of angle
-	 * X may traverse 1 or -1 in actuality but this doesn't matter here.
-	 * For straight up/down cases, X traverses zero but Y can be any value.
-	 * 
-	 * @param angle
-	 * @return
-	 */
-	public float getYXRatio(float angle){
-		// straight up, 0 deg
-		if(angleIsUp(angle) && !angleIsLeft(angle) && !angleIsRight(angle)){
-			return 1;
-		}
-		// straight down, 180 deg
-		if(angleIsDown(angle) && !angleIsLeft(angle) && !angleIsRight(angle)){
-			return -1;
-		}
-		// 0 - 90 deg quadrant
-		if(angleIsUp(angle) && angleIsRight(angle)){
-			return (float) Math.tan(Math.toRadians(90 - angle));
-		}
-		// 90 - 180 deg quadrant
-		if(angleIsDown(angle) && angleIsRight(angle)){
-			return 0 - (float) Math.tan(Math.toRadians(angle - 90));
-		}
-		// 180 - 270 deg quadrant
-		if(angleIsDown(angle) && angleIsLeft(angle)){
-			return 0 - (float) Math.tan(Math.toRadians(270 - angle));
-		}
-		// 270 - 260 deg quadrant
-		if(angleIsUp(angle) && angleIsLeft(angle)){
-			return (float) Math.tan(Math.toRadians(angle - 270));
-		}
-		// straight left or straight right
-		if(!angleIsUp(angle) && !angleIsDown(angle)){
-			return 0;
-		}
-		return 0;
-	}
-	
-	/** Checks if angle has leftward horizontal component.
-	 * 
-	 * @param angle
-	 * @return
-	 */
-	public boolean angleIsLeft(float angle){
-		if(angle > 180 && angle < 360){
-			return true;
-		}
-		return false;
-	}
-	
-	/** Checks if angle has rightward horizontal component.
-	 * 
-	 * @param angle
-	 * @return
-	 */
-	public boolean angleIsRight(float angle){
-		if(angle > 180 && angle < 360){
-			return true;
-		}
-		return false;
-	}
-	
-	/** Checks if angle has upward vertical component.
-	 * 
-	 * @param angle
-	 * @return
-	 */
-	public boolean angleIsUp(float angle){
-		if(angle > 0 && angle < 90){
-			return true;
-		}
-		if(angle > 270 && angle < 360){
-			return true;
-		}
-		return false;
-	}
-	
-	/** Checks if angle has downward vertical component.
-	 * 
-	 * @param angle
-	 * @return
-	 */
-	public boolean angleIsDown(float angle){
-		if(angle > 90 && angle < 270){
-			return true;
-		}
-		return false;
-	}
-	
+	// Needs functionality to check condition for 3x3 box around checked pix
+	// For error margin!
 	/** Finds distance to pix on other side of given shape, from the given pix,
 	 * at the given angle.
 	 * 
@@ -202,10 +113,8 @@ public class DisruptionTemplate extends ImageObj {
 	// latest for eserv
 	public float getDistanceToOtherEdge(Shape shape, Pix pix, float angle){
 		for(int pixInx = 0; pixInx < shape.getPixArray().size(); pixInx++){
-			if( shape.getPixArray().get(pixInx) != pix 
-					&& shape.pixIsShapeEdge(shape.getPixArray().get(pixInx))){
-				
-			}
+			// if checked pix is not self AND checked pix is at shape edge
+			
 		}
 		return 1;
 	}
@@ -217,7 +126,7 @@ public class DisruptionTemplate extends ImageObj {
 	 * @param pix
 	 * @param angle
 	 */
-	public void generateDisruptionStatsForAngle(Shape shape, Pix pix, float angle){
+	public void generateDisruptionStatsForAngle(Shape shape, Pix pix, Angle angle){
 		
 	}
 	
