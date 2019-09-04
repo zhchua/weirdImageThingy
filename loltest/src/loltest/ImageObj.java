@@ -22,40 +22,21 @@ public class ImageObj {
 		this.shapeList = new ShapeList();
 	}
 	
-	/** Strict copy of mutable object attributes. 
+	/** Strict or Referenced copy of mutable object attributes. 
 	 * 
 	 * @param otherImgObj
 	 */
-	private void strictCopy(ImageObj otherImgObj){
+	private void specialCopy(ImageObj otherImgObj, CopyDepth cd){
 		if(otherImgObj.getShapeList() != null){
 			if(!otherImgObj.getShapeList().isEmpty()){
 				this.shapeList = new ShapeList(otherImgObj.getShapeList()
-						, CopyDepth.STRICT);
+						, cd);
 			}
 		}
 		if(otherImgObj.getPixList() != null){
 			if(!otherImgObj.getPixList().isEmpty()){
 				this.pixList = new PixList(otherImgObj.getPixList()
-						, CopyDepth.STRICT);
-			}
-		}
-	}
-	
-	/** Strict copy of mutable object attributes. 
-	 * 
-	 * @param otherImgObj
-	 */
-	private void refCopy(ImageObj otherImgObj){
-		if(otherImgObj.getShapeList() != null){
-			if(!otherImgObj.getShapeList().isEmpty()){
-				this.shapeList = new ShapeList(otherImgObj.getShapeList()
-						, CopyDepth.REFERENCE);
-			}
-		}
-		if(otherImgObj.getPixList() != null){
-			if(!otherImgObj.getPixList().isEmpty()){
-				this.pixList = new PixList(otherImgObj.getPixList()
-						, CopyDepth.REFERENCE);
+						, cd);
 			}
 		}
 	}
@@ -66,11 +47,12 @@ public class ImageObj {
 	 * @param cd
 	 */
 	public ImageObj(ImageObj otherImgObj, CopyDepth cd){
-		if(cd == CopyDepth.STRICT){
-			strictCopy(otherImgObj);
+		if(cd == CopyDepth.STRICT || cd == CopyDepth.REFERENCE){
+			specialCopy(otherImgObj, cd);
 		}
-		if(cd == CopyDepth.REFERENCE){
-			refCopy(otherImgObj);
+		else{
+			this.pixList = otherImgObj.pixList;
+			this.shapeList = otherImgObj.shapeList;
 		}
 
 		this.name = otherImgObj.getName();

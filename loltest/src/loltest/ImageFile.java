@@ -37,17 +37,14 @@ public class ImageFile {
 	 */
 	public ImageFile(ImageObj imageObj){
 		this.imageObj = imageObj;
-		
+		this.width = imageObj.getWidth();
+		this.height = imageObj.getHeight();
 	}
 	
 	private void _____GETTERS_AND_SETTERS_____(){}
 	
 	public void setImage(BufferedImage image){
 		this.image = image;
-	}
-	
-	public BufferedImage getImage(){
-		return this.image;
 	}
 	
 	public void setImageObj(ImageObj imageObj){
@@ -133,120 +130,74 @@ public class ImageFile {
 		return this.file;
 	}
 	
-	/**	Reads known File attribute into image attribute.
-	 * 
-	 * @throws IOException
-	 */
-	public void readFileToImage() throws IOException{
-		this.image = ImageIO.read(this.file);
-	}
-	
-	/** Returns the integer of n to the power of p. Integers only.
-	 * 
-	 * @param n
-	 * @param p
-	 * @return
-	 */
-	private int pow(int n, int p){
-		// cant believe i needed to write this
-		if(p == 0){
-			return 1;
-		}
-		if(p == 1){
-			return n;
-		}
-		int prod = n;
-		for(int i = 2; i <= p; i++){
-			prod = prod*n;
-		}
-		return prod;
-	}
-	
-	/** Get an ArrayList representing the bit pattern of an integer
-	 * 
-	 * @param num
-	 * @return
-	 */
-	private ArrayList<Integer> getPower(Pix pix){
-		ArrayList<Integer> bits = new ArrayList<Integer>();
-		int col = 0;
-		int[] colours = {(int) pix.getColour().getA()
-				,(int) pix.getColour().getR()
-				,(int) pix.getColour().getG()
-				,(int) pix.getColour().getB()};
-		
-		// 128, 64, 32, 16, 8, 4, 2, 1
-		for(int clrInx = 0 ; clrInx < colours.length; clrInx++){
-			col = colours[clrInx];
-			for( int i = 7; i >= 0 ; i--){
-				if(col / pow(2,i) >= 1){
-					bits.add(1);
-					col = col - pow(2,i);
-				}
-				else bits.add(0);
-			}
-		}
-		return bits;
-	}
-	
-	/** Get an ArrayList representing the bit pattern of the 32-bit integer colours
-	 * 
-	 * @param a
-	 * @return
-	 */
-	private ArrayList<Integer> getColoursAsBits(Pix pix){
-		// ffs this is a dumb idea
-		return getPower(pix);
-	}
-	
-	/** Sets a pixel of imageFile using info (colour, coord) from a pix of imageObj
+	/** Sets a pixel of the Image object attribute of this ImageFile 
+	 * using the colour and coord from the given Pix
 	 * 
 	 * @param pix
 	 */
-	private void setImageFilePixByImageObjPix(Pix pix){
+	private void setImagePixByImageObjPix(Pix pix){
 /*		
 		this.image.setRGB(pix.getCoord().getX(), pix.getCoord().getY(), rgb);*/
 		
-		StringBuilder argbStrBld = new StringBuilder();
-		for(int i = 0; i < getPower(pix).size(); i++){
-			argbStrBld.append(getPower(pix).get(i));
-		}
-		String argbStr = argbStrBld.toString();
-		//int argb = Integer.parseInt(argbStr, 2);
-		int argb = (int) Long.parseLong(argbStr, 2);
-		//(int)Long.parseLong(s, 2)
+		int argb = pix.getColour().getIntARGB();
 		
 		this.image.setRGB(pix.getCoord().getX(), pix.getCoord().getY(), argb);
-
 	}
 	
-	/** Populates a new imageFile's pixels with pixel data from imageObj
+	/** Generates Image for this.image using the ImageObj object attribute of this
+	 * ImageFile.
 	 * 
 	 * @param imageObj
 	 */
-	private void generateImageFromImageObj(ImageObj imageObj){
-		this.image = new BufferedImage(imageObj.getWidth(), imageObj.getHeight()
-				, BufferedImage.TYPE_INT_ARGB);
-		for(int pixInx = 0; pixInx < imageObj.getPixList().size(); pixInx++){
-			setImageFilePixByImageObjPix(imageObj.getPixList().get(pixInx));
+	private void generateImageFromImageObj(){
+		if(this.imageObj != null){
+			this.image = new BufferedImage(imageObj.getWidth(), imageObj.getHeight()
+					, BufferedImage.TYPE_INT_ARGB);
+			for(int pixInx = 0; pixInx < imageObj.getPixList().size(); pixInx++){
+				setImagePixByImageObjPix(imageObj.getPixList().get(pixInx));
+			}
 		}
+	}
+	
+	/** Gets Image object attribute of this ImageFile. 
+	 * If this.image does not exist, will attempt to generate new Image from
+	 * ImageObj.
+	 * 
+	 * @return
+	 */
+	public BufferedImage getImage(){
+		if(this.image == null){
+			generateImageFromImageObj();
+		}
+		return this.image;
 	}
 	
 	private void __________METHODS__________(){}
 	
-	/**	Loads file attribute from pathname.
-	 * 
-	 */
-	public void loadFile(){
-		this.file = new File(this.pathname);
-	}
-	
-	/**	Saves file. Requires an existing image attribute.
+	/**	Saves this ImageFile to an actual file on the local system,
+	 *  at the given path, with the given name at the end of said path. 
+	 *  
+	 *  If pathName parameter is null or "", will save to this.pathName instead.
+	 *  
+	 * <pre> Example: "D:\\Image\\Output.png" </pre> 
+	 * saves to Output.png in directory D:\Image.
 	 * 
 	 * @throws IOException
 	 */
-	public void saveFile() throws IOException{
-	       this.file = new File(pathname);
-	       ImageIO.write(this.image, "png", this.file);
+	public void saveFile(String pathName) throws IOException{
+		if(pathName == null || pathName == ""){
+			if(this.pathname != null){
+				File file = new File(this.pathname);
+				ImageIO.write(this.getImage(), "png", file);
+			}
+			else{
+				System.out.println("No valid Path+Name specified, "
+						+ "unable to save.");
+			}
+		}
+		else{
+		    File file = new File(pathName);
+		    ImageIO.write(this.getImage(), "png", file);
+		}
 	}
 }

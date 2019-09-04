@@ -1,5 +1,7 @@
 package loltest;
 
+import java.util.ArrayList;
+
 public class Colour {
 	
 	private float r;
@@ -147,5 +149,65 @@ public class Colour {
 			return true;
 		}
 		return false;
+	}
+	
+	/** Returns the integer of n to the power of p. Integers only.
+	 * 
+	 * @param n
+	 * @param p
+	 * @return
+	 */
+	private int pow(int n, int p){
+		// cant believe i needed to write this
+		if(p == 0){
+			return 1;
+		}
+		if(p == 1){
+			return n;
+		}
+		int prod = n;
+		for(int i = 2; i <= p; i++){
+			prod = prod*n;
+		}
+		return prod;
+	}
+	
+	/** Get an ArrayList representing the bit pattern of this Colour's ARGB.
+	 * 
+	 * @param num
+	 * @return
+	 */
+	public ArrayList<Integer> getBitsArray(){
+		ArrayList<Integer> bits = new ArrayList<>();
+		int col = 0;
+		int[] colours = {(int) this.getA()
+				,(int) this.getR()
+				,(int) this.getG()
+				,(int) this.getB()};
+		
+		// 128, 64, 32, 16, 8, 4, 2, 1
+		for(int clrInx = 0 ; clrInx < colours.length; clrInx++){
+			col = colours[clrInx];
+			for( int i = 7; i >= 0 ; i--){
+				if(col / pow(2,i) >= 1){
+					bits.add(1);
+					col = col - pow(2,i);
+				}
+				else bits.add(0);
+			}
+		}
+		return bits;
+	}
+	
+	public String getBitsString(){
+		StringBuilder argbStrBld = new StringBuilder();
+		for(int i = 0; i < getBitsArray().size(); i++){
+			argbStrBld.append(getBitsArray().get(i));
+		}
+		return argbStrBld.toString();
+	}
+	
+	public int getIntARGB(){
+		return (int) Long.parseLong(getBitsString(), 2);
 	}
 }
