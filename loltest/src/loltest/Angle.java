@@ -62,6 +62,7 @@ public class Angle {
 	 * i.e. find vertical component of angle
 	 * X may traverse 1 or -1 in actuality but this doesn't matter here.
 	 * For straight up/down cases, X traverses zero but Y can be any value.
+	 * Follows Java image coordinate system where +y is DOWN.
 	 * 
 	 * @param angle
 	 * @return
@@ -69,27 +70,27 @@ public class Angle {
 	public float getYPerUnitX(){
 		// straight up, 0 deg
 		if(isUp() && !isLeft() && !isRight()){
-			return 1;
+			return -1;
 		}
 		// straight down, 180 deg
 		if(isDown() && !isLeft() && !isRight()){
-			return -1;
+			return 1;
 		}
 		// 0 - 90 deg quadrant
 		if(isUp() && isRight()){
-			return (float) Math.tan(Math.toRadians(90 - angVal));
+			return 0 - (float) Math.tan(Math.toRadians(90 - angVal));
 		}
 		// 90 - 180 deg quadrant
 		if(isDown() && isRight()){
-			return 0 - (float) Math.tan(Math.toRadians(angVal - 90));
+			return (float) Math.tan(Math.toRadians(angVal - 90));
 		}
 		// 180 - 270 deg quadrant
 		if(isDown() && isLeft()){
-			return 0 - (float) Math.tan(Math.toRadians(270 - angVal));
+			return (float) Math.tan(Math.toRadians(270 - angVal));
 		}
 		// 270 - 260 deg quadrant
 		if(isUp() && isLeft()){
-			return (float) Math.tan(Math.toRadians(angVal - 270));
+			return 0 - (float) Math.tan(Math.toRadians(angVal - 270));
 		}
 		// straight left or straight right
 		if(!isUp() && !isDown()){

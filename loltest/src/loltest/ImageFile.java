@@ -106,7 +106,7 @@ public class ImageFile {
 		float g = (float) ((colour>>8) & 0xff);
 		float b = (float) (colour & 0xff);
 	
-		imageObj.setPixIntoPixArray(new Pix( new Colour(a,r,g,b), new Coord(x,y)));
+		imageObj.addPix(new Pix( new Colour(a,r,g,b), new Coord(x,y)));
 	}
 	
 	/** Traverses image object to populate imageObj, pixelwise.

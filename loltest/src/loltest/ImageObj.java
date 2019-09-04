@@ -4,16 +4,39 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class ImageObj {
-	//private File file;
 	private String name;
 	private int width;
 	private int height;
 	private ArrayList<Pix> pixArray;
-	private ArrayList<Shape> shapeList;
+	private ShapeList shapeList;
 	
+	/** Create new ImageObj with only width and height information.
+	 * 
+	 * @param width
+	 * @param height
+	 */
 	public ImageObj(int width, int height){
 		this.width = width;
 		this.height = height;
+		this.pixArray = new ArrayList<>();
+		this.shapeList = new ShapeList();
+	}
+	
+	/** Create new ImageObj as a deep copy of given ImageObj.
+	 * 
+	 * @param otherImgObj
+	 */
+	public ImageObj(ImageObj otherImgObj){
+		if(otherImgObj.getShapeList() != null){
+			if(!otherImgObj.getShapeList().isEmpty()){
+				this.shapeList = new ShapeList(otherImgObj.getShapeList());
+			}
+		}
+		if(otherImgObj.getPixArray() != null){
+			if(!otherImgObj.getPixArray().isEmpty()){
+				this.pixArray = new ArrayList<>(otherImgObj.getPixArray());
+			}
+		}
 	}
 	
 	public String getName(){
@@ -32,7 +55,7 @@ public class ImageObj {
 		return this.pixArray;
 	}
 	
-	public ArrayList<Shape> getShapeList(){
+	public ShapeList getShapeList(){
 		return this.shapeList;
 	}
 	
@@ -40,62 +63,15 @@ public class ImageObj {
 	 * 
 	 * @param pix
 	 */
-	public void setPixIntoPixArray(Pix pix){
+	public void addPix(Pix pix){
 		if(pixArray == null){
-			this.pixArray = new ArrayList<Pix>();
+			this.pixArray = new ArrayList<>();
 		}
-		pixArray.add(pix);
+		if(pixArray.size() < this.getWidth()*this.getHeight()){
+			pixArray.add(pix);
+		}
 	}
-	
-	/** Checks if a given pixel is in any shapes in shapeList.
-	 * 
-	 * @param pix
-	 * @return
-	 */
-	public boolean pixIsAlreadyInShapes(Pix pix){
-		if(shapeList == null){
-			return false;
-		}
-		for(int shapeInx = 0; shapeInx < shapeList.size(); shapeInx++){
-			if(shapeList.get(shapeInx).pixIsInShape(pix)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/** Checks if two given pixels should belong to the same shape.
-	 * Calls same-colour checking and adjacency checking.
-	 * 
-	 * @param pix1
-	 * @param pix2
-	 * @return
-	 */
-	public boolean pixsSameShape(Pix pix1, Pix pix2){
-		if(pix1 != pix2 && pix1.isSameColourAs(pix2) && pix1.isAdjacentTo(pix2)){
-			return true;	
-		}
-		return false;
-	}
-	
-	/** Returns the shape that a given pixel belongs to.
-	 * Prerequisite: given pixel must already be assigned to a shape
-	 * 
-	 * @param pix
-	 * @return
-	 */
-	public Shape pixGetShape(Pix pix){
-		if(!pixIsAlreadyInShapes(pix)){
-			return null;
-		}
-		for(int shapeInx = 0; shapeInx < shapeList.size(); shapeInx++){
-			if(shapeList.get(shapeInx).pixIsInShape(pix)){
-				return shapeList.get(shapeInx);
-			}
-		}
-		return null;
-	}
-	
+
 	/** Sets pix into shape
 	 * If 2 pix rgb are equal and adjacent, is same shape
 	 * 
@@ -103,16 +79,17 @@ public class ImageObj {
 	 */
 	public void autoassignPixToShape(Pix pix){
 		if(this.shapeList == null){
-			this.shapeList = new ArrayList<Shape>();
+			this.shapeList = new ShapeList();
 		}
 		for(int checkPixInx = 0; checkPixInx < pixArray.size(); checkPixInx++){
-			if(pixsSameShape(pixArray.get(checkPixInx),pix)){
-				if(pixIsAlreadyInShapes(pixArray.get(checkPixInx))){
-					pixGetShape(pixArray.get(checkPixInx)).setPixIntoShape(pix);
+			if(pix.shouldbeSameShapeAs(pixArray.get(checkPixInx))){
+				if(shapeList.containsPix((pixArray.get(checkPixInx)))){
+					pixArray.get(checkPixInx).getShape(shapeList)
+					.insertPix(pix);
 				}
 				else{
 					Shape shape = new Shape();
-					shape.setPixIntoShape(pix);
+					shape.insertPix(pix);
 					shapeList.add(shape);
 				}
 			}
@@ -126,49 +103,19 @@ public class ImageObj {
 	 */
 	public void pixelwiseGenerateShapes(){
 		for(int currentPixInx = 0; currentPixInx < pixArray.size(); currentPixInx++){
-			if(!pixIsAlreadyInShapes(pixArray.get(currentPixInx))){
+			if(!pixArray.get(currentPixInx).isInShapes(shapeList)){
 				autoassignPixToShape(pixArray.get(currentPixInx));
 			}
 		}
-	}
-	
-	/** Checks if given pixel is at image edge
-	 * 
-	 * @param pix
-	 * @return
-	 */
-	public boolean pixIsImgEdge(Pix pix){
-		if(pix.getCoord().getX() == 0 || pix.getCoord().getX() == this.width){
-			return true;
-		}
-		if(pix.getCoord().getY() == 0 || pix.getCoord().getY() == this.height){
-			return true;
-		}
-		return false;
-	}
-	
-	/** Checks if given shape is at image edge
-	 * Does so by checking if given shape has pixel at image edge
-	 * 
-	 * @param shape
-	 * @return
-	 */
-	public boolean shapeIsImgEdge(Shape shape){
-		for(int pixInx = 0; pixInx<shape.getPixArray().size(); pixInx++){
-			if(pixIsImgEdge(shape.getPixArray().get(pixInx))){
-				return true;
-			}
-		}
-		return false;
 	}
 	
 	/** Replaces existing shapeList with new shapeList without edge shapes
 	 * 
 	 */
 	public void cullImgEdgeShapes(){
-		ArrayList<Shape> newShapeList = new ArrayList<Shape>();
+		ShapeList newShapeList = new ShapeList();
 		for(int shapeInx = 0; shapeInx < shapeList.size(); shapeInx++){
-			if(!shapeIsImgEdge(shapeList.get(shapeInx))){
+			if(!shapeList.get(shapeInx).isImageEdge(this)){
 				newShapeList.add(shapeList.get(shapeInx));
 			}
 		}
@@ -180,7 +127,7 @@ public class ImageObj {
 	 * @param coord
 	 * @return
 	 */
-	public Pix getPixByCoord(Coord coord){
+	public Pix getPix(Coord coord){
 		for(int pixInx = 0; pixInx < pixArray.size(); pixInx++){
 			if(pixArray.get(pixInx).getCoord() == coord){
 				return pixArray.get(pixInx);
@@ -189,35 +136,11 @@ public class ImageObj {
 		return null;
 	}
 	
-	/** Removes given shape from shapeList.
-	 * 
-	 * @param shape
-	 * @return
-	 */
-	public boolean cullShape(Shape shape){
-		return shapeList.remove(shape);
+	public Pix getPix(int inx){
+		return pixArray.get(inx);
 	}
 	
-	/** Checks if given pix is adjacent to another pix of same colour.
-	 * 
-	 * @param pix
-	 * @return
-	 */
-	public boolean pixIsAdjacentToSameColour(Pix pix){
-		int pixXLow = pix.getCoord().getX() - 1;
-		int pixXHigh = pix.getCoord().getX() + 1;
-		int pixYLow = pix.getCoord().getY() - 1;
-		int pixYHigh = pix.getCoord().getY() + 1;
-		
-		for(int checkX = pixXLow; checkX <= pixXHigh; checkX++){
-			for(int checkY = pixYLow; checkY <= pixYHigh; checkY++){
-				Pix checkPix = getPixByCoord(new Coord(checkX, checkY));
-				if(pix != checkPix && pixsAreAdjacent(pix, checkPix) 
-						&& pix.getColour().isSameRGB(checkPix.getColour())){
-					return true;
-				}
-			}
-		}
-		return false;
+	public Pix getPix(int x, int y){
+		return getPix(new Coord(x,y));
 	}
 }

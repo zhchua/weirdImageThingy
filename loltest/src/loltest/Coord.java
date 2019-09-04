@@ -9,6 +9,15 @@ public class Coord {
 		setCoord(x, y);
 	}
 	
+	/** Creates a new Coord that is a copy of given Coord.
+	 * 
+	 * @param coord
+	 */
+	public Coord(Coord coord){
+		this.x = coord.getX();
+		this.y = coord.getY();
+	}
+	
 	public int getX(){
 		return this.x;
 	}
@@ -37,10 +46,22 @@ public class Coord {
 	 * @return
 	 */
 	private boolean flEq(float fl1, float fl2){
-		float errMar1 = (float) ((0.001) * (fl1/100));
-		float errMar2 = (float) ((0.001) * (fl2/100));
+		float errMar1 = (float) ((0.000001) * fl1);
+		float errMar2 = (float) ((0.000001) * fl2);
 		
 		if(Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2){
+			return true;
+		}
+		return false;
+	}
+	
+	/** Compares given coord's X and Y with this coord to check if same.
+	 * 
+	 * @param otherCoord
+	 * @return
+	 */
+	public boolean sameAs(Coord otherCoord){
+		if(this.getX() == otherCoord.getX() && this.getY() == otherCoord.getY()){
 			return true;
 		}
 		return false;
@@ -214,10 +235,20 @@ public class Coord {
 		for(int chkX = -1; chkX < 2; chkX++){
 			for(int chkY = -1; chkY < 2; chkY++){
 				chkCoord.setCoord(this.getX()+chkX, this.getY()+chkY);
-				if(chkCoord != this && otherCoord == chkCoord){
+				if(chkCoord != this && otherCoord.sameAs(chkCoord)){
 					return true;
 				}
 			}
+		}
+		return false;
+	}
+	
+	public boolean isImageEdge(ImageObj imageObj){
+		if(this.getX() == 0 || this.getX() >= imageObj.getWidth() - 1){
+			return true;
+		}
+		if(this.getY() == 0 || this.getY() >= imageObj.getHeight() - 1){
+			return true;
 		}
 		return false;
 	}

@@ -14,6 +14,38 @@ public class Colour {
 		this.a = a;
 	}
 	
+	public Colour(int a, int r, int g, int b){
+		this.r = (float) r;
+		this.g = (float) g;
+		this.b = (float) b;
+		this.a = (float) a;
+	}
+	
+	public Colour(float r, float g, float b){
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		this.a = 0;
+	}
+	
+	public Colour(int r, int g, int b){
+		this.r = (float) r;
+		this.g = (float) g;
+		this.b = (float) b;
+		this.a = 0;
+	}
+	
+	/** Creates a new Colour that is a copy of given Colour.
+	 * 
+	 * @param colour
+	 */
+	public Colour(Colour colour){
+			this.a = colour.getA();
+			this.r = colour.getR();
+			this.g = colour.getG();
+			this.b = colour.getB();
+	}
+	
 	public void setR(float r){
 		this.r = r;
 	}
@@ -64,32 +96,28 @@ public class Colour {
 	 * @return
 	 */
 	private boolean flEq(float fl1, float fl2){
-		float errMar1 = (float) ((0.001) * (fl1/100));
-		float errMar2 = (float) ((0.001) * (fl2/100));
+		float errMar1 = (float) ((0.000001) * fl1);
+		float errMar2 = (float) ((0.000001) * fl2);
 		
-		if(Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2){
+		if(Math.abs(fl1 - fl2) == 0 || Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2){
+			return true;
+		}
+		return false;
+	}
+	
+	/** Checks if this colour has the same ARGB values as given colour.
+	 * 
+	 * @param otherColour
+	 * @return
+	 */
+	public boolean sameAs(Colour otherColour){
+		if(this.isSameAlpha(otherColour) && this.isSameRGB(otherColour)){
 			return true;
 		}
 		return false;
 	}
 	
 	private void _________________________________________(){}
-	
-	/** Checks if given colour has the same ARGB as this colour.
-	 * Calls flEq
-	 * 
-	 * @param otherColour
-	 * @return
-	 */
-	public boolean isSameARGB(Colour otherColour){
-		if(flEq(this.getA(), otherColour.getA())
-				&& flEq(this.getR(), otherColour.getR())
-				&& flEq(this.getG(), otherColour.getG())
-				&& flEq(this.getB(), otherColour.getB())){
-			return true;
-		}
-		return false;
-	}
 	
 	/** Checks if given colour has same RGB (excludes A) as this colour.
 	 * Calls flEq.
@@ -101,6 +129,19 @@ public class Colour {
 		if(flEq(this.getR(), otherColour.getR())
 				&& flEq(this.getG(), otherColour.getG())
 				&& flEq(this.getB(), otherColour.getB())){
+			return true;
+		}
+		return false;
+	}
+	
+	/** Checks if given colour has same Alpha channel value as this colour.
+	 * Calls flEq.
+	 * 
+	 * @param otherColour
+	 * @return
+	 */
+	public boolean isSameAlpha(Colour otherColour){
+		if(flEq(this.getA(), otherColour.getA())){
 			return true;
 		}
 		return false;

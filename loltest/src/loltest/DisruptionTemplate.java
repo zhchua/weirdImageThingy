@@ -19,6 +19,16 @@ public class DisruptionTemplate extends ImageObj {
 		super(width, height);
 	}
 	
+	public DisruptionTemplate(ImageObj otherImgObj){
+		super(otherImgObj);
+	}
+	
+	// copying incomplete
+	public DisruptionTemplate(DisruptionTemplate disTempl){
+		super(disTempl.getWidth(), disTempl.getHeight());
+		this.angleInterval = disTempl.getAngleInterval();
+	}
+	
 	public ArrayList<DisruptionStat> getDisruptionStats(){
 		return this.disruptionStats;
 	}
@@ -31,21 +41,6 @@ public class DisruptionTemplate extends ImageObj {
 		return this.angleInterval;
 	}
 	
-	/*
-	// randomly searches for an edge pixel
-	// edge pixel being adjacent to WHITE
-	public Coord getStartPoint(){
-		for(int pixInx = 0; pixInx < getPixArray().size(); pixInx++){
-			if(getPixArray().get(pixInx).getColour() == black){
-				if(!this.pixIsAdjacentToSameColour(getPixArray().get(pixInx))){
-					return getPixArray().get(pixInx).getCoord();
-				}
-			}
-		}
-		return null;
-	}
-	*/
-	
 	/** Determines equality between two floats to 0.001% precision of either value
 	 * 
 	 * @param fl1
@@ -53,26 +48,10 @@ public class DisruptionTemplate extends ImageObj {
 	 * @return
 	 */
 	private boolean flEq(float fl1, float fl2){
-		float errMar1 = (float) ((0.001) * (fl1/100));
-		float errMar2 = (float) ((0.001) * (fl2/100));
+		float errMar1 = (float) ((0.000001) * fl1);
+		float errMar2 = (float) ((0.000001) * fl2);
 		
-		if(Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2){
-			return true;
-		}
-		return false;
-	}
-	
-	/** Determines equality between two floats to a given precision of either value
-	 * 
-	 * @param fl1
-	 * @param fl2
-	 * @return
-	 */
-	private boolean flEq(float fl1, float fl2, float pres){
-		float errMar1 = (float) ((pres) * (fl1/100));
-		float errMar2 = (float) ((pres) * (fl2/100));
-		
-		if(Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2){
+		if(Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1 - fl2) < errMar2){
 			return true;
 		}
 		return false;
@@ -126,7 +105,7 @@ public class DisruptionTemplate extends ImageObj {
 	 * @param pix
 	 * @param angle
 	 */
-	public void generateDisruptionStatsForAngle(Shape shape, Pix pix, Angle angle){
+	public void generateDisruptionStats(Shape shape, Pix pix, Angle angle){
 		
 	}
 	
@@ -136,9 +115,9 @@ public class DisruptionTemplate extends ImageObj {
 	 * @param shape
 	 * @param pix
 	 */
-	public void generateDisruptionStatsForPix(Shape shape, Pix pix){
+	public void generateDisruptionStats(Shape shape, Pix pix){
 		for(int intervalCount = 0; intervalCount < angleInterval; intervalCount++){
-			generateDisruptionStatsForAngle(shape, pix, getAngleAtCount(intervalCount));
+			generateDisruptionStats(shape, pix, getAngleAtCount(intervalCount));
 		}
 	}
 	
@@ -147,10 +126,10 @@ public class DisruptionTemplate extends ImageObj {
 	 * 
 	 * @param shape
 	 */
-	public void generateDisruptionStatsForShape(Shape shape){
+	public void generateDisruptionStats(Shape shape){
 		for(int pixInx = 0; pixInx < shape.getPixArray().size(); pixInx++){
-			if(shape.pixIsShapeEdge(shape.getPixArray().get(pixInx))){
-				generateDisruptionStatsForPix(shape, shape.getPixArray().get(pixInx));
+			if(shape.getPixArray().get(pixInx).isShapeEdge(shape)){
+				generateDisruptionStats(shape, shape.getPixArray().get(pixInx));
 			}
 		}
 	}
@@ -158,12 +137,12 @@ public class DisruptionTemplate extends ImageObj {
 	/**	Populates disruptionStats list by iterating through every shape.
 	 * 
 	 */
-	public void generateDisruptionStatsForAllShapes(){
+	public void generateDisruptionStats(){
 		if(this.disruptionStats == null){
 			this.disruptionStats = new ArrayList<DisruptionStat>();
 		}
 		for(int shapeInx = 0; shapeInx < this.getShapeList().size(); shapeInx++){
-			generateDisruptionStatsForShape(this.getShapeList().get(shapeInx));
+			generateDisruptionStats(this.getShapeList().get(shapeInx));
 		}
 	}
 }
