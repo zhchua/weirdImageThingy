@@ -5,9 +5,15 @@ import java.util.List;
 
 public class Shape {
 
-	private ArrayList<Pix> pixArray;
-	private ArrayList<Pix> verticeArray;
-	private ArrayList<Pix> edgeArray;
+	private PixList pixList;
+	private PixList verticeList;
+	private PixList edgeList;
+	
+	public Shape(){
+		this.pixList = new PixList();
+		this.verticeList = new PixList();
+		this.edgeList = new PixList();
+	}
 	
 	/** Sets alpha channel of all pixs in shape to the specified value.
 	 * 
@@ -15,19 +21,19 @@ public class Shape {
 	 * @return
 	 */
 	public boolean setAllAlpha(float a){
-		if(pixArray == null){
+		if(pixList == null){
 			return false;
 		}
-		for(int i = 0; i < pixArray.size(); i++){
-			pixArray.get(i).getColour().setA(a);
+		for(int i = 0; i < pixList.size(); i++){
+			pixList.get(i).getColour().setA(a);
 		}
 		return true;
 	}
 	
 	public boolean sameAs(Shape otherShape){
-		if(this.getPixArray().size() == otherShape.getPixArray().size()){
-			for(int inx = 0; inx < this.getPixArray().size(); inx++){
-				if(!otherShape.containsPix(this.getPixArray().get(inx))){
+		if(this.getPixList().size() == otherShape.getPixList().size()){
+			for(int inx = 0; inx < this.getPixList().size(); inx++){
+				if(!otherShape.containsPix(this.getPixList().get(inx))){
 					return false;
 				}
 			}
@@ -35,27 +41,17 @@ public class Shape {
 		return false;
 	}
 	
-	public ArrayList<Pix> getPixArray(){
-		return this.pixArray;
+	public PixList getPixList(){
+		return this.pixList;
 	}
 	
-	/** Checks if Shape's pixArray contains pix.
-	 * Uses for loop and Pix.sameAs comparison because .contains calls .equals
+	/** Checks if Shape's pixList contains pix.
 	 * 
 	 * @param pix
 	 * @return
 	 */
 	public boolean containsPix(Pix pix){
-		if(this.getPixArray().contains(pix)){
-			return true;
-		}
-		for(int inx = 0; inx < this.getPixArray().size(); inx++){
-			if(this.getPixArray().get(inx).sameAs(pix)
-					|| this.getPixArray().get(inx).equals(pix)){
-				return true;
-			}
-		}
-		return false;
+		return this.getPixList().contains(pix);
 	}
 	
 	/** Inserts given pix into this shape. 
@@ -63,10 +59,10 @@ public class Shape {
 	 * @param pix
 	 */
 	public void insertPix(Pix pix){
-		if(this.pixArray == null){
-			this.pixArray = new ArrayList<Pix>();
+		if(this.pixList == null){
+			this.pixList = new PixList();
 		}
-		this.pixArray.add(pix);
+		this.pixList.add(pix);
 	}
 	
 	/** Removes given pix from this shape.
@@ -74,8 +70,8 @@ public class Shape {
 	 * @param pix
 	 * @return
 	 */
-	public boolean deletePixFromShape(Pix pix){
-		return pixArray.remove(pix);
+	public void deletePixFromShape(Pix pix){
+		pixList.remove(pix);
 	}
 	
 	/** Sets all pix in the shape to the given colour.
@@ -84,11 +80,11 @@ public class Shape {
 	 * @return
 	 */
 	public boolean setAllColour(Colour colour){
-		if(pixArray == null){
+		if(pixList == null){
 			return false;
 		}
-		for(int i = 0; i < pixArray.size(); i++){
-			pixArray.get(i).setColour(colour);
+		for(int i = 0; i < pixList.size(); i++){
+			pixList.get(i).setColour(colour);
 		}
 		return true;
 	}
@@ -100,23 +96,23 @@ public class Shape {
 	 * @return
 	 */
 	public Pix getPix(Coord coord){
-		for(int pixInx = 0; pixInx < pixArray.size(); pixInx++){
-			if(pixArray.get(pixInx).getCoord() == coord){
-				return pixArray.get(pixInx);
+		for(int pixInx = 0; pixInx < pixList.size(); pixInx++){
+			if(pixList.get(pixInx).getCoord() == coord){
+				return pixList.get(pixInx);
 			}
 		}
 		return null;
 	}
 	
-	/** Gets the Pix in the pixArray of this Shape by index.
-	 * This shape should already have a pixArray initialized, 
-	 * and inx should be within pixArray.size().
+	/** Gets the Pix in the pixList of this Shape by index.
+	 * This shape should already have a pixList initialized, 
+	 * and inx should be within pixList.size().
 	 * 
 	 * @param inx
 	 * @return
 	 */
 	public Pix getPix(int inx){
-		return pixArray.get(inx);
+		return pixList.get(inx);
 	}
 	
 	/** Checks if this Shape is at the image's edge.
@@ -127,8 +123,8 @@ public class Shape {
 	 * @return
 	 */
 	public boolean isImageEdge(ImageObj imageObj){
-		for(int inx = 0; inx < pixArray.size(); inx++){
-			if(pixArray.get(inx).isImageEdge(imageObj)){
+		for(int inx = 0; inx < pixList.size(); inx++){
+			if(pixList.get(inx).isImageEdge(imageObj)){
 				return true;
 			}
 		}
@@ -139,35 +135,34 @@ public class Shape {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Pix> generateEdgeArray(){
-		if(this.edgeArray == null){
-			this.edgeArray = new ArrayList<>();
+	private PixList generateEdgeArray(){
+		if(this.edgeList == null){
+			this.edgeList = new PixList();
 		}
-		
-		for(int inx = 0; inx < this.pixArray.size(); inx++){
-			if(this.pixArray.get(inx).isShapeEdge(this)){
-				this.edgeArray.add(this.pixArray.get(inx));
+		for(int inx = 0; inx < this.pixList.size(); inx++){
+			if(this.pixList.get(inx).isShapeEdge(this)){
+				this.edgeList.add(this.pixList.get(inx));
 			}
 		}
-		return this.edgeArray;
+		return this.edgeList;
 	}
 	
 	/** Gets arrayList of Pixs that are edges of this Shape.
-	 * If edgeArray does not yet exist, will attempt to generate.
+	 * If edgeList does not yet exist, will attempt to generate.
 	 * 
 	 * @return
 	 */
-	public ArrayList<Pix> getEdgeArray(){
-		if(this.edgeArray == null){
+	public PixList getEdgeList(){
+		if(this.edgeList == null){
 			generateEdgeArray();
 		}
-		return this.edgeArray;
+		return this.edgeList;
 	}
 	
-	/** Clears edgeArray by making it null.
+	/** Clears edgeList by making it null.
 	 * 
 	 */
-	public void deleteEdgeArray(){
-		this.edgeArray = null;
+	public void deleteEdgeList(){
+		this.edgeList = null;
 	}
 }

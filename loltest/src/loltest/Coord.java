@@ -9,7 +9,7 @@ public class Coord {
 		setCoord(x, y);
 	}
 	
-	/** Creates a new Coord that is a copy of given Coord.
+	/** Creates a strict copy of given Coord.
 	 * 
 	 * @param coord
 	 */

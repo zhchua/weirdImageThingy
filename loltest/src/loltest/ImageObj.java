@@ -7,7 +7,7 @@ public class ImageObj {
 	private String name;
 	private int width;
 	private int height;
-	private ArrayList<Pix> pixArray;
+	private PixList pixList;
 	private ShapeList shapeList;
 	
 	/** Create new ImageObj with only width and height information.
@@ -18,26 +18,67 @@ public class ImageObj {
 	public ImageObj(int width, int height){
 		this.width = width;
 		this.height = height;
-		this.pixArray = new ArrayList<>();
+		this.pixList = new PixList();
 		this.shapeList = new ShapeList();
 	}
 	
-	/** Create new ImageObj as a deep copy of given ImageObj.
+	/** Strict copy of mutable object attributes. 
 	 * 
 	 * @param otherImgObj
 	 */
-	public ImageObj(ImageObj otherImgObj){
+	private void strictCopy(ImageObj otherImgObj){
 		if(otherImgObj.getShapeList() != null){
 			if(!otherImgObj.getShapeList().isEmpty()){
-				this.shapeList = new ShapeList(otherImgObj.getShapeList());
+				this.shapeList = new ShapeList(otherImgObj.getShapeList()
+						, CopyDepth.STRICT);
 			}
 		}
-		if(otherImgObj.getPixArray() != null){
-			if(!otherImgObj.getPixArray().isEmpty()){
-				this.pixArray = new ArrayList<>(otherImgObj.getPixArray());
+		if(otherImgObj.getPixList() != null){
+			if(!otherImgObj.getPixList().isEmpty()){
+				this.pixList = new PixList(otherImgObj.getPixList()
+						, CopyDepth.STRICT);
 			}
 		}
 	}
+	
+	/** Strict copy of mutable object attributes. 
+	 * 
+	 * @param otherImgObj
+	 */
+	private void refCopy(ImageObj otherImgObj){
+		if(otherImgObj.getShapeList() != null){
+			if(!otherImgObj.getShapeList().isEmpty()){
+				this.shapeList = new ShapeList(otherImgObj.getShapeList()
+						, CopyDepth.REFERENCE);
+			}
+		}
+		if(otherImgObj.getPixList() != null){
+			if(!otherImgObj.getPixList().isEmpty()){
+				this.pixList = new PixList(otherImgObj.getPixList()
+						, CopyDepth.REFERENCE);
+			}
+		}
+	}
+	
+	/** Create new ImageObj as a deep copy of given ImageObj.
+	 *
+	 * @param otherImgObj
+	 * @param cd
+	 */
+	public ImageObj(ImageObj otherImgObj, CopyDepth cd){
+		if(cd == CopyDepth.STRICT){
+			strictCopy(otherImgObj);
+		}
+		if(cd == CopyDepth.REFERENCE){
+			refCopy(otherImgObj);
+		}
+
+		this.name = otherImgObj.getName();
+		this.width = otherImgObj.getWidth();
+		this.height = otherImgObj.getHeight();
+	}
+	
+	private void _____GETTERS_AND_SETTERS_____(){}
 	
 	public String getName(){
 		return this.name;
@@ -51,26 +92,18 @@ public class ImageObj {
 		return this.width;
 	}
 	
-	public ArrayList<Pix> getPixArray(){
-		return this.pixArray;
+	public PixList getPixList(){
+		return this.pixList;
 	}
 	
 	public ShapeList getShapeList(){
 		return this.shapeList;
 	}
 	
-	/** Insert pix into pixArray.
+	/** Spacer
 	 * 
-	 * @param pix
 	 */
-	public void addPix(Pix pix){
-		if(pixArray == null){
-			this.pixArray = new ArrayList<>();
-		}
-		if(pixArray.size() < this.getWidth()*this.getHeight()){
-			pixArray.add(pix);
-		}
-	}
+	private void __________METHODS__________(){}
 
 	/** Sets pix into shape
 	 * If 2 pix rgb are equal and adjacent, is same shape
@@ -81,10 +114,10 @@ public class ImageObj {
 		if(this.shapeList == null){
 			this.shapeList = new ShapeList();
 		}
-		for(int checkPixInx = 0; checkPixInx < pixArray.size(); checkPixInx++){
-			if(pix.shouldbeSameShapeAs(pixArray.get(checkPixInx))){
-				if(shapeList.containsPix((pixArray.get(checkPixInx)))){
-					pixArray.get(checkPixInx).getShape(shapeList)
+		for(int checkPixInx = 0; checkPixInx < pixList.size(); checkPixInx++){
+			if(pix.shouldbeSameShapeAs(pixList.get(checkPixInx))){
+				if(shapeList.containsPix((pixList.get(checkPixInx)))){
+					pixList.get(checkPixInx).getShape(shapeList)
 					.insertPix(pix);
 				}
 				else{
@@ -102,9 +135,9 @@ public class ImageObj {
 	 * 
 	 */
 	public void pixelwiseGenerateShapes(){
-		for(int currentPixInx = 0; currentPixInx < pixArray.size(); currentPixInx++){
-			if(!pixArray.get(currentPixInx).isInShapes(shapeList)){
-				autoassignPixToShape(pixArray.get(currentPixInx));
+		for(int currentPixInx = 0; currentPixInx < pixList.size(); currentPixInx++){
+			if(!pixList.get(currentPixInx).isInShapes(shapeList)){
+				autoassignPixToShape(pixList.get(currentPixInx));
 			}
 		}
 	}
@@ -120,27 +153,5 @@ public class ImageObj {
 			}
 		}
 		this.shapeList = newShapeList;
-	}
-	
-	/**	Returns pix located at given coord.
-	 * 
-	 * @param coord
-	 * @return
-	 */
-	public Pix getPix(Coord coord){
-		for(int pixInx = 0; pixInx < pixArray.size(); pixInx++){
-			if(pixArray.get(pixInx).getCoord() == coord){
-				return pixArray.get(pixInx);
-			}
-		}
-		return null;
-	}
-	
-	public Pix getPix(int inx){
-		return pixArray.get(inx);
-	}
-	
-	public Pix getPix(int x, int y){
-		return getPix(new Coord(x,y));
 	}
 }

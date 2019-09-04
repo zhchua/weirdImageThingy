@@ -35,7 +35,7 @@ public class Colour {
 		this.a = 0;
 	}
 	
-	/** Creates a new Colour that is a copy of given Colour.
+	/** Creates a strict copy of given Colour.
 	 * 
 	 * @param colour
 	 */
@@ -45,6 +45,8 @@ public class Colour {
 			this.g = colour.getG();
 			this.b = colour.getB();
 	}
+	
+	private void _____GETTERS_AND_SETTERS_____(){}
 	
 	public void setR(float r){
 		this.r = r;
@@ -117,7 +119,7 @@ public class Colour {
 		return false;
 	}
 	
-	private void _________________________________________(){}
+	private void __________METHODS__________(){}
 	
 	/** Checks if given colour has same RGB (excludes A) as this colour.
 	 * Calls flEq.

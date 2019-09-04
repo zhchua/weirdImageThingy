@@ -20,11 +20,17 @@ public class Pix {
 			this.colour = new Colour(pix.getColour());
 			this.coord = new Coord(pix.getCoord());
 		}
+		else if(cd == CopyDepth.REFERENCE){
+			this.colour = pix.getColour();
+			this.coord = pix.getCoord();
+		}
 		else{
 			this.colour = pix.colour;
 			this.coord = pix.coord;
 		}
 	}
+	
+	private void _____GETTERS_SETTERS_____(){}
 	
 	public Colour getColour(){
 		return this.colour;
@@ -54,7 +60,7 @@ public class Pix {
 		return false;
 	}
 	
-	private void _________________________________________(){}
+	private void __________METHODS__________(){}
 	
 	/** Checks if given pix is the same colour as this pix.
 	 * Calls Colour.isSameRGB

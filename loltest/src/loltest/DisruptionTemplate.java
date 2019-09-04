@@ -11,7 +11,7 @@ import java.util.HashMap;
 // and calculate across all shapes
 public class DisruptionTemplate extends ImageObj {
 	
-	private ArrayList<DisruptionStat> disruptionStats;
+	private DisStatList disStatList;
 	
 	private int angleInterval;
 	
@@ -19,18 +19,18 @@ public class DisruptionTemplate extends ImageObj {
 		super(width, height);
 	}
 	
-	public DisruptionTemplate(ImageObj otherImgObj){
-		super(otherImgObj);
+	public DisruptionTemplate(ImageObj otherImgObj, CopyDepth cd){
+		super(otherImgObj, cd);
 	}
 	
-	// copying incomplete
-	public DisruptionTemplate(DisruptionTemplate disTempl){
-		super(disTempl.getWidth(), disTempl.getHeight());
+	// copying incomplete FOR DISRUPTION STATS
+	public DisruptionTemplate(DisruptionTemplate disTempl, CopyDepth cd){
+		super(disTempl, cd);
 		this.angleInterval = disTempl.getAngleInterval();
 	}
 	
-	public ArrayList<DisruptionStat> getDisruptionStats(){
-		return this.disruptionStats;
+	public DisStatList getDisruptionStats(){
+		return this.disStatList;
 	}
 	
 	public void setAngleInterval(int angleInterval){
@@ -74,50 +74,48 @@ public class DisruptionTemplate extends ImageObj {
 		return new Angle((float)count * (((float)360)/((float)angleInterval)));
 	}
 	
-	// Needs functionality to check condition for 3x3 box around checked pix
-	// For error margin!
-	/** Finds distance to pix on other side of given shape, from the given pix,
-	 * at the given angle.
+	/**  Generates single disruptionStat for given Angle from given Pix of
+	 * given Shape.
 	 * 
-	 * Straight-up is considered 0deg, goes clockwise.
-	 * 
-	 * If no pixs are found with the angle, return 0
-	 * 
-	 * @param shape
-	 * @param pix
-	 * @param angle
-	 * @return
-	 */
-	// neon for extranet
-	// latest for eserv
-	public float getDistanceToOtherEdge(Shape shape, Pix pix, float angle){
-		for(int pixInx = 0; pixInx < shape.getPixArray().size(); pixInx++){
-			// if checked pix is not self AND checked pix is at shape edge
-			
-		}
-		return 1;
-	}
-	
-	/**  Generates single disruptionStat by drawing line from origin (pix)
-	 *  in the direction specified by angle.
+	 * Iterates through all edge Pixs of given Shape, checks for approximate angle.
 	 * 
 	 * @param shape
 	 * @param pix
 	 * @param angle
 	 */
-	public void generateDisruptionStats(Shape shape, Pix pix, Angle angle){
+	public DisStat generateDisruptionStats(
+			Angle angle, Pix pix, Shape shape){
 		
+		ArrayList<Float> distances = new ArrayList<>();
+		for(int edgeInx = 0; edgeInx < shape.getEdgeList().size(); edgeInx++){
+			if(!shape.getEdgeList().get(edgeInx).sameAs(pix) 
+					&& !shape.getEdgeList().get(edgeInx).equals(pix)){
+				if(pix.getCoord().isApproxAngleTo(
+						shape.getEdgeList().get(edgeInx).getCoord(), angle)){
+					distances.add(pix.getCoord().getDistanceTo(
+							shape.getEdgeList().get(edgeInx).getCoord()));
+				}
+			}
+		}
+		float shortest = distances.get(0);
+		for(int dInx = 0; dInx < distances.size(); dInx++){
+			if(shortest > distances.get(dInx)){
+				shortest = distances.get(dInx);
+			}
+		}
+		return new DisStat(angle, shortest);
 	}
 	
-	/** Populates disruptionStats list by iterating through every angle of the 
-	 * desired interval, at the given pix.
+	/** Populates disruptionStats list by iterating through every Angle of the 
+	 * desired interval, at the given Pix.
 	 * 
 	 * @param shape
 	 * @param pix
 	 */
-	public void generateDisruptionStats(Shape shape, Pix pix){
+	public DisStat generateDisruptionStats(Pix pix, Shape shape){
 		for(int intervalCount = 0; intervalCount < angleInterval; intervalCount++){
-			generateDisruptionStats(shape, pix, getAngleAtCount(intervalCount));
+			return generateDisruptionStats(getAngleAtCount(intervalCount)
+					, pix, shape);
 		}
 	}
 	
@@ -127,14 +125,13 @@ public class DisruptionTemplate extends ImageObj {
 	 * @param shape
 	 */
 	public void generateDisruptionStats(Shape shape){
-		for(int pixInx = 0; pixInx < shape.getPixArray().size(); pixInx++){
-			if(shape.getPixArray().get(pixInx).isShapeEdge(shape)){
-				generateDisruptionStats(shape, shape.getPixArray().get(pixInx));
-			}
+		for(int edgeInx = 0; edgeInx < shape.getEdgeList().size(); edgeInx++){
+			generateDisruptionStats(shape.getPixList().get(edgeInx), shape);
 		}
 	}
 	
-	/**	Populates disruptionStats list by iterating through every shape.
+	/**	Populates disruptionStats list by iterating through every Shape
+	 *	in ShapeList.
 	 * 
 	 */
 	public void generateDisruptionStats(){

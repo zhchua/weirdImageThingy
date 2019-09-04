@@ -14,7 +14,7 @@ public class ShapeList{
 	 * 
 	 * @param otherShapeList
 	 */
-	public ShapeList(ShapeList otherShapeList){
+	public ShapeList(ShapeList otherShapeList, CopyDepth cd){
 		for(int inx = 0; inx < otherShapeList.size(); inx++){
 			this.aList.add(otherShapeList.get(inx));
 		}

@@ -4,30 +4,28 @@ public class Angle {
 	
 	private float angVal;
 	
-	private int count;
-	
 	public Angle(float angle){
 		this.angVal = angle;
+	}
+	
+	/** Initializes Angle as a copy of given Angle.
+	 * 
+	 * @param angle
+	 */
+	public Angle(Angle angle){
+		this.angVal = angle.getAngVal();
 	}
 	
 	public float value(){
 		return this.angVal;
 	}
 	
-	public float getAngle(){
+	public float getAngVal(){
 		return this.angVal;
 	}
 	
 	public void setAngle(float angle){
 		this.angVal = angle;
-	}
-	
-	public void setCount(int count){
-		this.count = count;
-	}
-	
-	public int getCount(){
-		return this.count;
 	}
 	
 	/** Returns the current angle in radians.
@@ -36,6 +34,34 @@ public class Angle {
 	 */
 	public float inRadians(){
 		return (float) Math.toRadians(this.angVal);
+	}
+	
+	/** Determines equality between two floats to 0.001% precision of either value
+	 * 
+	 * @param fl1
+	 * @param fl2
+	 * @return
+	 */
+	private boolean flEq(float fl1, float fl2){
+		float errMar1 = (float) ((0.000001) * fl1);
+		float errMar2 = (float) ((0.000001) * fl2);
+		
+		if(Math.abs(fl1 - fl2) == 0 || Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2){
+			return true;
+		}
+		return false;
+	}
+	
+	/** Checks if given Angle has the same attribute values as this Angle.
+	 * 
+	 * @param otherAngle
+	 * @return
+	 */
+	public boolean sameAs(Angle otherAngle){
+		if( flEq( this.getAngVal() , otherAngle.getAngVal() ) ){
+			return true;
+		}
+		return false;
 	}
 	
 	private void _________________________________________(){
