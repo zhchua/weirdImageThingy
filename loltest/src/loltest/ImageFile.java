@@ -17,9 +17,30 @@ public class ImageFile {
 	private int width;
 	private int height;
 	
-	public ImageFile(String name){
-		setName(name);
+	/** Create ImageFile from file at given pathname.
+	 * 
+	 * @param pathName
+	 * @throws IOException 
+	 */
+	public ImageFile(String pathName) throws IOException{
+		this.pathname = pathName;
+		this.file = new File(this.pathname);
+		this.image = ImageIO.read(this.file);
+		this.width = this.image.getWidth();
+		this.height = this.image.getHeight();
+		generateImageObj();
 	}
+	
+	/** Create ImageFile from given ImageObj.
+	 * 
+	 * @param imageObj
+	 */
+	public ImageFile(ImageObj imageObj){
+		this.imageObj = imageObj;
+		
+	}
+	
+	private void _____GETTERS_AND_SETTERS_____(){}
 	
 	public void setImage(BufferedImage image){
 		this.image = image;
@@ -33,7 +54,49 @@ public class ImageFile {
 		this.imageObj = imageObj;
 	}
 	
+	/**	Generates data for a single pix using data from BufferedImage pixel.
+	 * 
+	 * @param colour	integer colour (NOT COLOUR CLASS!) in ARGB form.
+	 * @param x
+	 * @param y
+	 */
+	private void generatePixForImageObj(int colour, int x, int y){
+		float a = (float) ((colour>>24) & 0xff);
+		float r = (float) ((colour>>16) & 0xff);
+		float g = (float) ((colour>>8) & 0xff);
+		float b = (float) (colour & 0xff);
+	
+		imageObj.getPixList().add(new Pix( new Colour(a,r,g,b), new Coord(x,y)));
+	}
+	
+	/** Traverses image object to populate imageObj, pixelwise.
+	 * 
+	 */
+	private void generateImageObjDetailsFromImage(){
+		for(int checkX = 0; checkX < this.getWidth(); checkX++){
+			for(int checkY = 0; checkY < this.getHeight(); checkY++){
+				generatePixForImageObj(image.getRGB(checkX, checkY), checkX, checkY);
+			}
+		}
+	}
+	
+	/** Creates empty ImageObj and calls generateImageObjDetailsFromImage
+	 * to generate the ImageObj's data from Image.
+	 * 
+	 */
+	private void generateImageObj(){
+		if(file == null){
+			System.out.println("File does not Exist");
+			return;
+		}
+		else this.imageObj = new ImageObj(this.width, this.height);
+		generateImageObjDetailsFromImage();
+	}
+	
 	public ImageObj getImageObj(){
+		if(this.imageObj == null){
+			generateImageObj();
+		}
 		return this.imageObj;
 	}
 	
@@ -62,28 +125,12 @@ public class ImageFile {
 		return this.pathname;
 	}
 	
-	/**	Loads file attribute from pathname.
-	 * 
-	 */
-	public void loadFile(){
-		this.file = new File(this.pathname);
+	public void setFile(File file){
+		this.file = file;
 	}
 	
-	/**	Saves file. Requires an existing image attribute.
-	 * 
-	 * @throws IOException
-	 */
-	public void saveFile() throws IOException{
-	       this.file = new File(pathname);
-	       ImageIO.write(this.image, "png", this.file);
-	}
-	
-	/** Reads existing image attribute to set width and height.
-	 * 
-	 */
-	public void generateWidthHeight(){
-		setWidth(this.image.getWidth());
-		setHeight(this.image.getHeight()); 
+	public File getFile(){
+		return this.file;
 	}
 	
 	/**	Reads known File attribute into image attribute.
@@ -94,52 +141,13 @@ public class ImageFile {
 		this.image = ImageIO.read(this.file);
 	}
 	
-	/**	Generates data for a single pix using data from BufferedImage pixel.
-	 * 
-	 * @param colour	integer colour (NOT COLOUR CLASS!) in ARGB form.
-	 * @param x
-	 * @param y
-	 */
-	public void generatePixForImageObj(int colour, int x, int y){
-		float a = (float) ((colour>>24) & 0xff);
-		float r = (float) ((colour>>16) & 0xff);
-		float g = (float) ((colour>>8) & 0xff);
-		float b = (float) (colour & 0xff);
-	
-		imageObj.addPix(new Pix( new Colour(a,r,g,b), new Coord(x,y)));
-	}
-	
-	/** Traverses image object to populate imageObj, pixelwise.
-	 * 
-	 */
-	public void generateImageObjDetailsFromImage(){
-		for(int checkX = 0; checkX < this.getWidth(); checkX++){
-			for(int checkY = 0; checkY < this.getHeight(); checkY++){
-				generatePixForImageObj(image.getRGB(checkX, checkY), checkX, checkY);
-			}
-		}
-	}
-	
-	/** Void function to create new imageObj 
-	 * and generate the imageObj's data from image.
-	 * 
-	 */
-	public void generateImageObj(){
-		if(file == null){
-			System.out.println("File does not Exist");
-			return;
-		}
-		else this.imageObj = new ImageObj(this.width, this.height);
-		generateImageObjDetailsFromImage();
-	}
-	
 	/** Returns the integer of n to the power of p. Integers only.
 	 * 
 	 * @param n
 	 * @param p
 	 * @return
 	 */
-	public int pow(int n, int p){
+	private int pow(int n, int p){
 		// cant believe i needed to write this
 		if(p == 0){
 			return 1;
@@ -159,7 +167,7 @@ public class ImageFile {
 	 * @param num
 	 * @return
 	 */
-	public ArrayList<Integer> getPower(Pix pix){
+	private ArrayList<Integer> getPower(Pix pix){
 		ArrayList<Integer> bits = new ArrayList<Integer>();
 		int col = 0;
 		int[] colours = {(int) pix.getColour().getA()
@@ -186,7 +194,7 @@ public class ImageFile {
 	 * @param a
 	 * @return
 	 */
-	public ArrayList<Integer> getColoursAsBits(Pix pix){
+	private ArrayList<Integer> getColoursAsBits(Pix pix){
 		// ffs this is a dumb idea
 		return getPower(pix);
 	}
@@ -195,7 +203,7 @@ public class ImageFile {
 	 * 
 	 * @param pix
 	 */
-	public void setImageFilePixByImageObjPix(Pix pix){
+	private void setImageFilePixByImageObjPix(Pix pix){
 /*		
 		this.image.setRGB(pix.getCoord().getX(), pix.getCoord().getY(), rgb);*/
 		
@@ -216,12 +224,29 @@ public class ImageFile {
 	 * 
 	 * @param imageObj
 	 */
-	public void generateImageFromImageObj(ImageObj imageObj){
+	private void generateImageFromImageObj(ImageObj imageObj){
 		this.image = new BufferedImage(imageObj.getWidth(), imageObj.getHeight()
 				, BufferedImage.TYPE_INT_ARGB);
-		for(int pixInx = 0; pixInx < imageObj.getPixArray().size(); pixInx++){
-			setImageFilePixByImageObjPix(imageObj.getPixArray().get(pixInx));
+		for(int pixInx = 0; pixInx < imageObj.getPixList().size(); pixInx++){
+			setImageFilePixByImageObjPix(imageObj.getPixList().get(pixInx));
 		}
 	}
 	
+	private void __________METHODS__________(){}
+	
+	/**	Loads file attribute from pathname.
+	 * 
+	 */
+	public void loadFile(){
+		this.file = new File(this.pathname);
+	}
+	
+	/**	Saves file. Requires an existing image attribute.
+	 * 
+	 * @throws IOException
+	 */
+	public void saveFile() throws IOException{
+	       this.file = new File(pathname);
+	       ImageIO.write(this.image, "png", this.file);
+	}
 }

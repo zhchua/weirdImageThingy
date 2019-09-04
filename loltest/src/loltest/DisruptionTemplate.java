@@ -15,18 +15,30 @@ public class DisruptionTemplate extends ImageObj {
 	
 	private int angleInterval;
 	
-	public DisruptionTemplate(int width, int height){
+	public DisruptionTemplate(int width, int height, int angleInterval){
 		super(width, height);
+		this.angleInterval = angleInterval;
 	}
 	
-	public DisruptionTemplate(ImageObj otherImgObj, CopyDepth cd){
+	public DisruptionTemplate(ImageObj otherImgObj, CopyDepth cd, int angleInterval){
 		super(otherImgObj, cd);
+		this.angleInterval = angleInterval;
 	}
 	
-	// copying incomplete FOR DISRUPTION STATS
 	public DisruptionTemplate(DisruptionTemplate disTempl, CopyDepth cd){
 		super(disTempl, cd);
 		this.angleInterval = disTempl.getAngleInterval();
+		if(cd == CopyDepth.STRICT){
+			this.disStatList = new DisStatList(disTempl.getDisruptionStats()
+					, CopyDepth.STRICT);
+		}
+		else if(cd == CopyDepth.REFERENCE){
+			this.disStatList = new DisStatList(disTempl.getDisruptionStats()
+					, CopyDepth.REFERENCE);
+		}
+		else{
+			this.disStatList = disTempl.getDisruptionStats();
+		}
 	}
 	
 	public DisStatList getDisruptionStats(){
@@ -83,10 +95,11 @@ public class DisruptionTemplate extends ImageObj {
 	 * @param pix
 	 * @param angle
 	 */
-	public DisStat generateDisruptionStats(
+	private void generateDisruptionStats(
 			Angle angle, Pix pix, Shape shape){
 		
 		ArrayList<Float> distances = new ArrayList<>();
+		
 		for(int edgeInx = 0; edgeInx < shape.getEdgeList().size(); edgeInx++){
 			if(!shape.getEdgeList().get(edgeInx).sameAs(pix) 
 					&& !shape.getEdgeList().get(edgeInx).equals(pix)){
@@ -103,7 +116,7 @@ public class DisruptionTemplate extends ImageObj {
 				shortest = distances.get(dInx);
 			}
 		}
-		return new DisStat(angle, shortest);
+		this.disStatList.add( new DisStat(angle, shortest));
 	}
 	
 	/** Populates disruptionStats list by iterating through every Angle of the 
@@ -112,10 +125,9 @@ public class DisruptionTemplate extends ImageObj {
 	 * @param shape
 	 * @param pix
 	 */
-	public DisStat generateDisruptionStats(Pix pix, Shape shape){
+	private void generateDisruptionStats(Pix pix, Shape shape){
 		for(int intervalCount = 0; intervalCount < angleInterval; intervalCount++){
-			return generateDisruptionStats(getAngleAtCount(intervalCount)
-					, pix, shape);
+			generateDisruptionStats(getAngleAtCount(intervalCount), pix, shape);
 		}
 	}
 	
@@ -124,7 +136,7 @@ public class DisruptionTemplate extends ImageObj {
 	 * 
 	 * @param shape
 	 */
-	public void generateDisruptionStats(Shape shape){
+	private void generateDisruptionStats(Shape shape){
 		for(int edgeInx = 0; edgeInx < shape.getEdgeList().size(); edgeInx++){
 			generateDisruptionStats(shape.getPixList().get(edgeInx), shape);
 		}
@@ -135,9 +147,7 @@ public class DisruptionTemplate extends ImageObj {
 	 * 
 	 */
 	public void generateDisruptionStats(){
-		if(this.disruptionStats == null){
-			this.disruptionStats = new ArrayList<DisruptionStat>();
-		}
+		this.disStatList = new DisStatList();
 		for(int shapeInx = 0; shapeInx < this.getShapeList().size(); shapeInx++){
 			generateDisruptionStats(this.getShapeList().get(shapeInx));
 		}

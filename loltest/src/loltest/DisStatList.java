@@ -16,9 +16,26 @@ public class DisStatList{
 	 * @param otherDisStatList
 	 */
 	public DisStatList(DisStatList disStatList, CopyDepth cd){
-		for(int inx = 0; inx < disStatList.size(); inx++){
-			this.aList.add(disStatList.get(inx));
+		if(cd == CopyDepth.STRICT){
+			this.aList = new ArrayList<DisStat>();
+			for(int dsInx = 0; dsInx < disStatList.size(); dsInx++){
+				this.aList.add(new DisStat(disStatList.get(dsInx)
+						, CopyDepth.STRICT));
+			}
 		}
+		else if(cd == CopyDepth.REFERENCE){
+			this.aList = new ArrayList<DisStat>();
+			for(int dsInx = 0; dsInx < disStatList.size(); dsInx++){
+				this.aList.add(disStatList.get(dsInx));
+			}
+		}
+		else{
+			this.aList = disStatList.getList();
+		}
+	}
+	
+	public ArrayList<DisStat> getList(){
+		return this.aList;
 	}
 	
 	/** Adds given DisStat into this DisStatList.
@@ -128,15 +145,27 @@ public class DisStatList{
 	
 	private void _________________________________________(){}
 	
+	/** Checks if this DisStatList contains the given DisStat,
+	 * or has a DisStat with identical parameters.
+	 * 
+	 * @param disStat
+	 * @return
+	 */
 	public boolean containsDisStat(DisStat disStat){
 		for(int inx = 0 ; inx < this.size(); inx++){
-			if(this.get(inx).sameAs(disStat)){
+			if(this.get(inx).sameAs(disStat) || this.get(inx).equals(disStat)){
 				return true;
 			}
 		}
 		return false;
 	}
 	
+	/** Checks if there exists a DisStat with an Angle corresponding to the
+	 * given Angle.
+	 * 
+	 * @param angle
+	 * @return
+	 */
 	public boolean containsAngle(Angle angle){
 		for(int inx = 0; inx < this.size(); inx++){
 			if(this.get(inx).getAngle().sameAs(angle)){
@@ -146,6 +175,12 @@ public class DisStatList{
 		return false;
 	}
 	
+	/** Determines the shortest length for the given Angle.
+	 * Returns -1 if does not exist.
+	 * 
+	 * @param angle
+	 * @return
+	 */
 	public float getMinLengthAtAngle(Angle angle){
 		float min = -1;
 		for(int dsInx = 0; dsInx < this.size(); dsInx++){
@@ -158,6 +193,12 @@ public class DisStatList{
 		return min;
 	}
 	
+	/** Determines the longest length for the given Angle.
+	 * Returns -1 if does not exist.
+	 * 
+	 * @param angle
+	 * @return
+	 */
 	public float getMaxLengthAtAngle(Angle angle){
 		float max = -1;
 		for(int dsInx = -1; dsInx < this.size(); dsInx++){
@@ -168,5 +209,26 @@ public class DisStatList{
 			}
 		}
 		return max;
+	}
+	
+	/** Calculates the average length for the given Angle.
+	 * 
+	 * @param angle
+	 * @return
+	 */
+	public float getAvgLengthAtAngle(Angle angle){
+		float sum = 0;
+		int cnt = 0;
+		
+		for(int dsInx = -1; dsInx < this.size(); dsInx++){
+			if(this.get(dsInx).getAngle().sameAs(angle)){
+				sum = sum + this.get(dsInx).getLength();
+				cnt++;
+			}
+		}
+		if(flEq(sum,0) || cnt==0){
+			return -1;
+		}
+		return sum/cnt;
 	}
 }
