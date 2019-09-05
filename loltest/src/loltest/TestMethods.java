@@ -3,6 +3,7 @@ package loltest;
 public class TestMethods {
 	
 	public static void main(String[] args){
+		
 		int a = 1;
 		int b = a;
 		
@@ -17,6 +18,7 @@ public class TestMethods {
 		
 		System.out.println(x==y);
 		System.out.println(x.val == y.val);
+		
 	}
 	
 }

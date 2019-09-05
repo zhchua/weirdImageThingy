@@ -1,0 +1,6 @@
+Sep 05, 2019 5:02:25 PM loltest.O setUp
+INFO: O.setUp complete
+Sep 05, 2019 5:02:25 PM loltest.O <init>
+INFO: O : new test O
+Sep 05, 2019 5:02:25 PM loltest.O P
+INFO: O.P : testprint
