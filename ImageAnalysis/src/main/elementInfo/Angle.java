@@ -1,6 +1,8 @@
-package InfoObjects;
+package main.elementInfo;
 
-public class Angle extends InfoObjects.Base.AngleBase{
+import main.elementInfo.base.AngleBase;
+
+public class Angle extends AngleBase{
 	
 	public Angle(Angle angle) {
 		super(angle);
@@ -116,5 +118,23 @@ public class Angle extends InfoObjects.Base.AngleBase{
 			return true;
 		}
 		return false;
+	}
+	
+
+	
+	/** Returns the given angle to within 0 - 360.
+	 * If given angle is already within 0 - 360 degrees, returns given angle as is.
+	 * 
+	 * @param angle
+	 * @return
+	 */
+	public float rerangeAngle(float angle){
+		if(angle>=360){
+			return angle - 360;
+		}
+		else if(angle<0){
+			return 360 - angle;
+		}
+		else return angle;
 	}
 }

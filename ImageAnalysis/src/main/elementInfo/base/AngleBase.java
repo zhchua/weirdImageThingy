@@ -1,4 +1,4 @@
-package infoObjects.base;
+package main.elementInfo.base;
 
 public class AngleBase{
 	
@@ -10,6 +10,10 @@ public class AngleBase{
 	 */
 	public AngleBase(float angle){
 		this.value = angle;
+	}
+	
+	public AngleBase(double angle){
+		this.value = (float) angle;
 	}
 	
 	/** Initializes Angle as a copy of given Angle.
@@ -26,6 +30,10 @@ public class AngleBase{
 	
 	public void setValue(float angle){
 		this.value = angle;
+	}
+	
+	public void setValue(double angle){
+		this.value = (float) angle;
 	}
 	
 	/** Returns the current angle in radians.
@@ -67,7 +75,6 @@ public class AngleBase{
 	public String toString(){
 		return Float.toString(this.getValue()) + " " + "degrees";
 	}
-	
 
 }
 	

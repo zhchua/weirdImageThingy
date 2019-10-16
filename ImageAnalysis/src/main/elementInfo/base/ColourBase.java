@@ -1,13 +1,14 @@
-package InfoObjects.Base;
+package main.elementInfo.base;
 
 import java.util.ArrayList;
 
 public class ColourBase {
 
+	private float a;
 	private float r;
 	private float g;
 	private float b;
-	private float a;
+
 
 	public ColourBase(float a, float r, float g, float b){
 		this.r = r;

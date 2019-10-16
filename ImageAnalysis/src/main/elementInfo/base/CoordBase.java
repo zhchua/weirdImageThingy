@@ -1,4 +1,4 @@
-package InfoObjects.Base;
+package main.elementInfo.base;
 
 public class CoordBase {
 	
