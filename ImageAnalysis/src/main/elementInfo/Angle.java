@@ -1,8 +1,13 @@
 package main.elementInfo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.elementInfo.base.AngleBase;
 
 public class Angle extends AngleBase{
+	
+	private static Logger logger = LoggerFactory.getLogger(Angle.class);
 	
 	public Angle(Angle angle) {
 		super(angle);

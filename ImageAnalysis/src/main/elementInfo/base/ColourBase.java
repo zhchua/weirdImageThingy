@@ -15,6 +15,7 @@ public class ColourBase {
 		this.g = g;
 		this.b = b;
 		this.a = a;
+		invalidNumberCheck();
 	}
 
 	public ColourBase(int a, int r, int g, int b){
@@ -22,6 +23,7 @@ public class ColourBase {
 		this.g = (float) g;
 		this.b = (float) b;
 		this.a = (float) a;
+		invalidNumberCheck();
 	}
 
 	public ColourBase(float r, float g, float b){
@@ -29,6 +31,7 @@ public class ColourBase {
 		this.g = g;
 		this.b = b;
 		this.a = 0;
+		invalidNumberCheck();
 	}
 
 	public ColourBase(int r, int g, int b){
@@ -36,6 +39,7 @@ public class ColourBase {
 		this.g = (float) g;
 		this.b = (float) b;
 		this.a = 0;
+		invalidNumberCheck();
 	}
 
 	/** Creates a strict copy of given Colour.
@@ -47,10 +51,29 @@ public class ColourBase {
 		this.r = colour.getR();
 		this.g = colour.getG();
 		this.b = colour.getB();
+		invalidNumberCheck();
 	}
 
 	private void _____GETTERS_AND_SETTERS_____(){}
 
+	/** Checks ARGB for values <0 or >255. Throw exception if invalid values found.
+	 * 
+	 */
+	private void invalidNumberCheck(){
+		if(this.a < 0 || this.a > 255){
+			throw new IllegalArgumentException("Alpha is out of range.");
+		}
+		if(this.r < 0 || this.r > 255){
+			throw new IllegalArgumentException("Red is out of range.");
+		}
+		if(this.g < 0 || this.g > 255){
+			throw new IllegalArgumentException("Green is out of range.");
+		}
+		if(this.b < 0 || this.b > 255){
+			throw new IllegalArgumentException("Blue is out of range.");
+		}
+	}
+	
 	public void setR(float r){
 		this.r = r;
 	}
