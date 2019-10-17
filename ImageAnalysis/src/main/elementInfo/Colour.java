@@ -1,10 +1,10 @@
-package InfoObjects;
+package main.elementInfo;
 
-import InfoObjects.Base.ColourBase;
+import main.elementInfo.base.ColourBase;
 
 public class Colour extends ColourBase {
 
-	public Colour(float a, float r, float g, float b) {
+	public Colour(double a, double r, double g, double b) {
 		super(a, r, g, b);
 	}
 
@@ -12,7 +12,7 @@ public class Colour extends ColourBase {
 		super(a, r, g, b);
 	}
 
-	public Colour(float r, float g, float b) {
+	public Colour(double r, double g, double b) {
 		super(r, g, b);
 	}
 

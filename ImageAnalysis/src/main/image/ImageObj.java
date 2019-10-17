@@ -1,4 +1,4 @@
-package Image;
+package main.image;
 
 import java.io.File;
 import java.util.ArrayList;

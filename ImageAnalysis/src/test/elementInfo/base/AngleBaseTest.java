@@ -11,7 +11,7 @@ public class AngleBaseTest {
 
 	@Test
 	public void testAngleBaseFloat() {
-		float flangle = (float) Math.random();
+		double flangle = Math.random();
 		AngleBase angleBase = new AngleBase(flangle);
 		Assert.assertEquals(flangle, angleBase.getValue(), flangle/1000);
 	}
@@ -25,16 +25,16 @@ public class AngleBaseTest {
 
 	@Test
 	public void testAngleBaseAngleBase() {
-		float flangle = (float) Math.random();
+		double flangle = Math.random();
 		AngleBase angleBase = new AngleBase(flangle);
 		AngleBase angleBase2 = new AngleBase(angleBase);
-		angleBase.setValue((float) Math.random());
+		angleBase.setValue(Math.random());
 		Assert.assertNotEquals(angleBase.getValue(), angleBase2.getValue());
 	}
 
 	@Test
 	public void testGetValue() {
-		float flangle = (float) Math.random();
+		double flangle = Math.random();
 		AngleBase angleBase = new AngleBase(flangle);
 		Assert.assertEquals(flangle, angleBase.getValue(), flangle/1000);
 	}
@@ -50,8 +50,8 @@ public class AngleBaseTest {
 	@Test
 	public void testInRadians() {
 		AngleBase angleBase = new AngleBase(180);
-		Assert.assertEquals((float) Math.PI, angleBase.inRadians()
-				, (float) Math.PI/1000);
+		Assert.assertEquals(Math.PI, angleBase.inRadians()
+				, Math.PI/1000);
 	}
 
 	@Test

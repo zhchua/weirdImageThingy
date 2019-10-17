@@ -13,10 +13,10 @@ import main.elementInfo.base.ColourBase;
 import main.util.O;
 
 public class ColourBaseTest {
-	private float fl1;
-	private float fl2;
-	private float fl3;
-	private float fl4;
+	private double fl1;
+	private double fl2;
+	private double fl3;
+	private double fl4;
 	
 	private int int1;
 	private int int2;
@@ -25,14 +25,14 @@ public class ColourBaseTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		fl1 = (float) Math.random() * 255;
-		fl2 = (float) Math.random() * 255;
-		fl3 = (float) Math.random() * 255;
-		fl4 = (float) Math.random() * 255;
-		int1 = (int) Math.random() * 255;
-		int2 = (int) Math.random() * 255;
-		int3 = (int) Math.random() * 255;
-		int4 = (int) Math.random() * 255;
+		fl1 =  Math.random() * 255;
+		fl2 =  Math.random() * 255;
+		fl3 =  Math.random() * 255;
+		fl4 =  Math.random() * 255;
+		int1 = (int) (Math.random() * 255);
+		int2 = (int) (Math.random() * 255);
+		int3 = (int) (Math.random() * 255);
+		int4 = (int) (Math.random() * 255);
 	}
 
 	@After

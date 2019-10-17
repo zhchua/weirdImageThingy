@@ -2,18 +2,14 @@ package main.elementInfo.base;
 
 public class AngleBase{
 	
-	private float value;
+	private double value;
 	
 	/** Create a new Angle with a float angle.
 	 * 
 	 * @param angle
 	 */
-	public AngleBase(float angle){
-		this.value = angle;
-	}
-	
 	public AngleBase(double angle){
-		this.value = (float) angle;
+		this.value = angle;
 	}
 	
 	/** Initializes Angle as a copy of given Angle.
@@ -24,37 +20,35 @@ public class AngleBase{
 		this.value = angle.getValue();
 	}
 	
-	public float getValue(){
+	public double getValue(){
 		return this.value;
 	}
 	
-	public void setValue(float angle){
-		this.value = angle;
-	}
-	
 	public void setValue(double angle){
-		this.value = (float) angle;
+		this.value = angle;
 	}
 	
 	/** Returns the current angle in radians.
 	 * 
 	 * @return
 	 */
-	public float inRadians(){
-		return (float) Math.toRadians(this.value);
+	public double inRadians(){
+		return Math.toRadians(this.value);
 	}
 	
-	/** Determines equality between two floats to 0.001% precision of either value
+	/** Determines equality between two floating pt numbers 
+	 * to 0.001% precision of either value
 	 * 
 	 * @param fl1
 	 * @param fl2
 	 * @return
 	 */
-	private boolean flEq(float fl1, float fl2){
+	private boolean flEq(double fl1, double fl2){
 		float errMar1 = (float) ((0.000001) * fl1);
 		float errMar2 = (float) ((0.000001) * fl2);
 		
-		if(Math.abs(fl1 - fl2) == 0 || Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2){
+		if(Math.abs(fl1 - fl2) == 0 || Math.abs(fl1 - fl2) < errMar1 
+				&& Math.abs(fl1-fl2) < errMar2){
 			return true;
 		}
 		return false;
@@ -73,7 +67,7 @@ public class AngleBase{
 	}
 	
 	public String toString(){
-		return Float.toString(this.getValue()) + " " + "degrees";
+		return Double.toString(this.getValue()) + " " + "degrees";
 	}
 
 }

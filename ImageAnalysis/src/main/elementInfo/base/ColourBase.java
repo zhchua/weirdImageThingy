@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class ColourBase {
 
-	private float a;
-	private float r;
-	private float g;
-	private float b;
+	private double a;
+	private double r;
+	private double g;
+	private double b;
 
 
-	public ColourBase(float a, float r, float g, float b){
+	public ColourBase(double a, double r, double g, double b){
 		this.r = r;
 		this.g = g;
 		this.b = b;
@@ -19,14 +19,14 @@ public class ColourBase {
 	}
 
 	public ColourBase(int a, int r, int g, int b){
-		this.r = (float) r;
-		this.g = (float) g;
-		this.b = (float) b;
-		this.a = (float) a;
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		this.a = a;
 		invalidNumberCheck();
 	}
 
-	public ColourBase(float r, float g, float b){
+	public ColourBase(double r, double g, double b){
 		this.r = r;
 		this.g = g;
 		this.b = b;
@@ -35,9 +35,9 @@ public class ColourBase {
 	}
 
 	public ColourBase(int r, int g, int b){
-		this.r = (float) r;
-		this.g = (float) g;
-		this.b = (float) b;
+		this.r = r;
+		this.g = g;
+		this.b = b;
 		this.a = 0;
 		invalidNumberCheck();
 	}
@@ -74,58 +74,58 @@ public class ColourBase {
 		}
 	}
 	
-	public void setR(float r){
+	public void setR(double r){
 		this.r = r;
 	}
 
-	public void setG(float g){
+	public void setG(double g){
 		this.g = g;
 	}
 
-	public void setB(float b){
+	public void setB(double b){
 		this.b = b;
 	}
 
-	public void setA(float a){
+	public void setA(double a){
 		this.a = a;
 	}
 
-	public void setRGB(float r, float g, float b){
+	public void setRGB(double r, double g, double b){
 		setR(r);
 		setG(g);
 		setB(b);
 	}
 
-	public void setARGB(float a, float r, float g, float b){
+	public void setARGB(double a, double r, double g, double b){
 		setR(r);
 		setG(g);
 		setB(b);
 		setA(a);
 	}
 
-	public float getR(){
+	public double getR(){
 		return this.r;
 	}
 
-	public float getG(){
+	public double getG(){
 		return this.g;
 	}
-	public float getB(){
+	public double getB(){
 		return this.b;
 	}
-	public float getA(){
+	public double getA(){
 		return this.a;
 	}
 
-	/** Determines equality between two floats to 0.001% precision of either value
+	/** Determines equality between two doubles to 0.001% precision of either value
 	 * 
 	 * @param fl1
 	 * @param fl2
 	 * @return
 	 */
-	private boolean flEq(float fl1, float fl2){
-		float errMar1 = (float) ((0.000001) * fl1);
-		float errMar2 = (float) ((0.000001) * fl2);
+	private boolean flEq(double fl1, double fl2){
+		double errMar1 = ((0.000001) * fl1);
+		double errMar2 = ((0.000001) * fl2);
 
 		if(Math.abs(fl1 - fl2) == 0 || Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2){
 			return true;
@@ -202,7 +202,7 @@ public class ColourBase {
 	 * @return
 	 */
 	public ArrayList<Integer> getBitsArray(){
-		ArrayList<Integer> bits = new ArrayList<>();
+		ArrayList<Integer> bits = new ArrayList<Integer>();
 		int col = 0;
 		int[] colours = {(int) this.getA()
 				,(int) this.getR()

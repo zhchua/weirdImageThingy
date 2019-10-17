@@ -1,20 +1,21 @@
 package main.elementInfo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import main.elementInfo.base.AngleBase;
 
 public class Angle extends AngleBase{
 	
-	private static Logger logger = LoggerFactory.getLogger(Angle.class);
-	
 	public Angle(Angle angle) {
 		super(angle);
+		rerangeAngle();
 	}
 	
-	public Angle(float angle){
+	public Angle(double angle){
 		super(angle);
+		rerangeAngle();
+	}
+	
+	public void setValue(double dbl){
+		super.setValue(rerangeAngle(dbl));
 	}
 
 	/** Determines if unit X should be -1 (left), 1 (right) 
@@ -23,12 +24,12 @@ public class Angle extends AngleBase{
 	 * @param angle
 	 * @return
 	 */
-	public float getUnitXComponent(){
+	public double getUnitXComponent(){
 		if(isLeft()){
-			return 1;
+			return -1;
 		}
 		if(isRight()){
-			return -1;
+			return 1;
 		}
 		return 0;
 	}
@@ -42,7 +43,7 @@ public class Angle extends AngleBase{
 	 * @param angle
 	 * @return
 	 */
-	public float getYPerUnitX(){
+	public double getYPerUnitX(){
 		// straight up, 0 deg
 		if(isUp() && !isLeft() && !isRight()){
 			return -1;
@@ -53,19 +54,19 @@ public class Angle extends AngleBase{
 		}
 		// 0 - 90 deg quadrant
 		if(isUp() && isRight()){
-			return 0 - (float) Math.tan(Math.toRadians(90 - getValue()));
+			return 0 -  Math.tan(Math.toRadians(90 - getValue()));
 		}
 		// 90 - 180 deg quadrant
 		if(isDown() && isRight()){
-			return (float) Math.tan(Math.toRadians(getValue() - 90));
+			return  Math.tan(Math.toRadians(getValue() - 90));
 		}
 		// 180 - 270 deg quadrant
 		if(isDown() && isLeft()){
-			return (float) Math.tan(Math.toRadians(270 - getValue()));
+			return  Math.tan(Math.toRadians(270 - getValue()));
 		}
 		// 270 - 260 deg quadrant
 		if(isUp() && isLeft()){
-			return 0 - (float) Math.tan(Math.toRadians(getValue() - 270));
+			return 0 -  Math.tan(Math.toRadians(getValue() - 270));
 		}
 		// straight left or straight right
 		if(!isUp() && !isDown()){
@@ -92,7 +93,7 @@ public class Angle extends AngleBase{
 	 * @return
 	 */
 	public boolean isRight(){
-		if(getValue() > 180 && getValue() < 360){
+		if(getValue() > 0 && getValue() < 180){
 			return true;
 		}
 		return false;
@@ -104,7 +105,7 @@ public class Angle extends AngleBase{
 	 * @return
 	 */
 	public boolean isUp(){
-		if(getValue() > 0 && getValue() < 90){
+		if(getValue() >= 0 && getValue() < 90){
 			return true;
 		}
 		if(getValue() > 270 && getValue() < 360){
@@ -133,13 +134,20 @@ public class Angle extends AngleBase{
 	 * @param angle
 	 * @return
 	 */
-	public float rerangeAngle(float angle){
+	public double rerangeAngle(double angle){
 		if(angle>=360){
-			return angle - 360;
+			return angle%360;
 		}
 		else if(angle<0){
-			return 360 - angle;
+			return 360 + (angle%360);
 		}
 		else return angle;
+	}
+	
+	/** Sets this angle to within 0 - 360 degrees.
+	 * 
+	 */
+	private void rerangeAngle(){
+		this.setValue(rerangeAngle(this.getValue()));
 	}
 }

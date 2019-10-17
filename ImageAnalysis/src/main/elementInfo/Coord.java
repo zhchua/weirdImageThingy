@@ -1,7 +1,7 @@
-package InfoObjects;
+package main.elementInfo;
 
-import Image.ImageObj;
-import InfoObjects.Base.CoordBase;
+import main.elementInfo.base.CoordBase;
+import main.image.ImageObj;
 
 public class Coord extends CoordBase {
 
@@ -65,12 +65,82 @@ public class Coord extends CoordBase {
 		return false;
 	}
 	
+	public boolean isVerticalOf(Coord otherCoord){
+		if(!this.isLeftOf(otherCoord) && !this.isRightOf(otherCoord)){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isHorizontalOf(Coord otherCoord){
+		if(!this.isAbove(otherCoord) && !this.isBelow(otherCoord)){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isDirectlyLeftOf(Coord otherCoord){
+		if(this.isHorizontalOf(otherCoord) && this.isLeftOf(otherCoord)){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isDirectlyRightOf(Coord otherCoord){
+		if(this.isHorizontalOf(otherCoord) && this.isRightOf(otherCoord)){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isDirectlyAbove(Coord otherCoord){
+		if(this.isVerticalOf(otherCoord) && this.isAbove(otherCoord)){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isDirectlyBelow(Coord otherCoord){
+		if(this.isVerticalOf(otherCoord) && this.isBelow(otherCoord)){
+			return true;
+		}
+		return false;
+	}
+	
+	/** Finds the vertical displacement of moving from this coord to given coord.
+	 * ^ given.y - this.y
+	 * 
+	 * @param otherCoord
+	 * @return
+	 */
 	public int getYDispTo(Coord otherCoord){
 		return otherCoord.getY() - this.getY();
 	}
 	
+	/** Finds the horizontal displacement of moving from this coord to given coord.
+	 * ^ given.x - this.x
+	 * 
+	 * @param otherCoord
+	 * @return
+	 */
 	public int getXDispTo(Coord otherCoord){
 		return otherCoord.getX() - this.getX();
+	}
+	
+	public int getYDispFrom(Coord otherCoord){
+		return this.getY() - otherCoord.getY();
+	}
+	
+	public int getXDispFrom(Coord otherCoord){
+		return this.getX() - otherCoord.getX();
+	}
+	
+	public int getYDistBetween(Coord otherCoord){
+		return Math.abs(this.getYDispTo(otherCoord));
+	}
+	
+	public int getXDistBetween(Coord otherCoord){
+		return Math.abs(this.getXDispTo(otherCoord));
 	}
 	
 	/** Calculates diagonal distance between this coord and given coord
@@ -80,12 +150,12 @@ public class Coord extends CoordBase {
 	 * @param coord2
 	 * @return
 	 */
-	public float getDistanceTo(Coord otherCoord){
+	public double getDistanceTo(Coord otherCoord){
 		
-		float dx = (float) (otherCoord.getX() - this.getX());
-		float dy = (float) (otherCoord.getY() - this.getY());
+		double dx =  (otherCoord.getX() - this.getX());
+		double dy =  (otherCoord.getY() - this.getY());
 		
-		return (float) Math.sqrt(Math.pow(dx,2) + Math.pow(dy, 2));
+		return  Math.sqrt(Math.pow(dx,2) + Math.pow(dy, 2));
 	}
 	
 	/** Finds the angle from this coord to given coord.
@@ -97,26 +167,22 @@ public class Coord extends CoordBase {
 	 */
 	public Angle getAngleTo(Coord otherCoord){
 		// pure verticals
-		if(!this.isLeftOf(otherCoord) && !this.isRightOf(otherCoord)){
-			if(this.isAbove(otherCoord)){
-				return new Angle(180);
-			}
-			if(this.isBelow(otherCoord)){
-				return new Angle(0);
-			}
+		if(this.isDirectlyBelow(otherCoord)){
+			return new Angle(180);
+		}
+		if(this.isDirectlyAbove(otherCoord)){
+			return new Angle(0);
 		}
 		// pure horizontals
-		if(!this.isAbove(otherCoord) && !this.isBelow(otherCoord)){
-			if(this.isLeftOf(otherCoord)){
-				return new Angle(90);
-			}
-			if(this.isRightOf(otherCoord)){
-				return new Angle(270);
-			}
+		if(this.isDirectlyLeftOf(otherCoord)){
+			return new Angle(90);
 		}
-		float absDX = Math.abs(this.getXDispTo(otherCoord));
-		float absDY = Math.abs(this.getYDispTo(otherCoord));
-		float angDeg = (float) Math.toDegrees(Math.atan(absDY/absDX));
+		if(this.isDirectlyRightOf(otherCoord)){
+			return new Angle(270);
+		}
+		double absDX = this.getXDistBetween(otherCoord);
+		double absDY = this.getYDistBetween(otherCoord);
+		double angDeg =  Math.toDegrees(Math.atan(absDY/absDX));
 		// quadrant 0-90
 		if(this.isBelow(otherCoord) && this.isLeftOf(otherCoord)){
 			return new Angle( 90 - angDeg);
@@ -146,8 +212,8 @@ public class Coord extends CoordBase {
 	 */
 	public boolean isApproxAngleTo(Coord otherCoord, Angle angle){
 
-		float minAng = angle.getValue();
-		float maxAng = angle.getValue();
+		double minAng = angle.getValue();
+		double maxAng = angle.getValue();
 		Coord chkCoord = new Coord(0,0);
 		
 		for(int chkX = -1; chkX < 2; chkX++){
