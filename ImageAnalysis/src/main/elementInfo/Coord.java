@@ -7,12 +7,10 @@ public class Coord extends CoordBase {
 
 	public Coord(int x, int y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
 	}
 
 	public Coord(CoordBase coord) {
 		super(coord);
-		// TODO Auto-generated constructor stub
 	}
 	
 	/** Returns true if this coord is to the left of the given coord.
@@ -21,10 +19,7 @@ public class Coord extends CoordBase {
 	 * @return
 	 */
 	public boolean isLeftOf(Coord otherCoord){
-		if(this.getX() < otherCoord.getX()){
-			return true;
-		}
-		return false;
+		return (this.getX() < otherCoord.getX());
 	}
 	
 	/** Returns true if this coord is to the right of given coord. 
@@ -33,10 +28,7 @@ public class Coord extends CoordBase {
 	 * @return
 	 */
 	public boolean isRightOf(Coord otherCoord){
-		if(this.getX() > otherCoord.getX()){
-			return true;
-		}
-		return false;
+		return (this.getX() > otherCoord.getX());
 	}
 	
 	/** Returns true if this coord is above given coord. 
@@ -46,10 +38,7 @@ public class Coord extends CoordBase {
 	 * @return
 	 */
 	public boolean isAbove(Coord otherCoord){
-		if(this.getY() < otherCoord.getY()){
-			return true;
-		}
-		return false;
+		return (this.getY() < otherCoord.getY());
 	}
 	
 	/** Returns true if this coord is below the given coord. 
@@ -59,52 +48,31 @@ public class Coord extends CoordBase {
 	 * @return
 	 */
 	public boolean isBelow(Coord otherCoord){
-		if(this.getY() > otherCoord.getY()){
-			return true;
-		}
-		return false;
+		return (this.getY() > otherCoord.getY());
 	}
 	
 	public boolean isVerticalOf(Coord otherCoord){
-		if(!this.isLeftOf(otherCoord) && !this.isRightOf(otherCoord)){
-			return true;
-		}
-		return false;
+		return (!this.isLeftOf(otherCoord) && !this.isRightOf(otherCoord));
 	}
 	
 	public boolean isHorizontalOf(Coord otherCoord){
-		if(!this.isAbove(otherCoord) && !this.isBelow(otherCoord)){
-			return true;
-		}
-		return false;
+		return (!this.isAbove(otherCoord) && !this.isBelow(otherCoord));
 	}
 	
 	public boolean isDirectlyLeftOf(Coord otherCoord){
-		if(this.isHorizontalOf(otherCoord) && this.isLeftOf(otherCoord)){
-			return true;
-		}
-		return false;
+		return (this.isHorizontalOf(otherCoord) && this.isLeftOf(otherCoord));
 	}
 	
 	public boolean isDirectlyRightOf(Coord otherCoord){
-		if(this.isHorizontalOf(otherCoord) && this.isRightOf(otherCoord)){
-			return true;
-		}
-		return false;
+		return (this.isHorizontalOf(otherCoord) && this.isRightOf(otherCoord));
 	}
 	
 	public boolean isDirectlyAbove(Coord otherCoord){
-		if(this.isVerticalOf(otherCoord) && this.isAbove(otherCoord)){
-			return true;
-		}
-		return false;
+		return (this.isVerticalOf(otherCoord) && this.isAbove(otherCoord));
 	}
 	
 	public boolean isDirectlyBelow(Coord otherCoord){
-		if(this.isVerticalOf(otherCoord) && this.isBelow(otherCoord)){
-			return true;
-		}
-		return false;
+		return (this.isVerticalOf(otherCoord) && this.isBelow(otherCoord));
 	}
 	
 	/** Finds the vertical displacement of moving from this coord to given coord.
@@ -150,7 +118,7 @@ public class Coord extends CoordBase {
 	 * @param coord2
 	 * @return
 	 */
-	public double getDistanceTo(Coord otherCoord){
+	public double getDistanceBetween(Coord otherCoord){
 		
 		double dx =  (otherCoord.getX() - this.getX());
 		double dy =  (otherCoord.getY() - this.getY());
@@ -219,19 +187,18 @@ public class Coord extends CoordBase {
 		for(int chkX = -1; chkX < 2; chkX++){
 			for(int chkY = -1; chkY < 2; chkY++){
 				chkCoord.setCoord(otherCoord.getX()+chkX, otherCoord.getY()+chkY);
-				if(this.getAngleTo(chkCoord).getValue() < minAng){
+				if(!this.sameAs(chkCoord) 
+						&& this.getAngleTo(chkCoord).getValue() <= minAng ){
 					minAng = this.getAngleTo(chkCoord).getValue();
 				}
-				if(this.getAngleTo(chkCoord).getValue() > maxAng){
+				if( !this.sameAs(chkCoord) 
+						&& this.getAngleTo(chkCoord).getValue() >= maxAng){
 					maxAng = this.getAngleTo(chkCoord).getValue();
 				}
 			}
 		}
 		
-		if(minAng < angle.getValue() && maxAng > angle.getValue()){
-			return true;
-		}
-		return false;
+		return (minAng <= angle.getValue() && maxAng >= angle.getValue());
 	}
 
 	/** Checks if given coord is adjacent to (within 3x3 grid) of this coord.
@@ -255,12 +222,11 @@ public class Coord extends CoordBase {
 	}
 	
 	public boolean isImageEdge(ImageObj imageObj){
-		if(this.getX() == 0 || this.getX() >= imageObj.getWidth() - 1){
-			return true;
-		}
-		if(this.getY() == 0 || this.getY() >= imageObj.getHeight() - 1){
-			return true;
-		}
-		return false;
+		return ( this.getY() == 0 || this.getY() >= imageObj.getHeight() - 1 ||
+				this.getX() == 0 || this.getX() >= imageObj.getWidth() - 1 );
+	}
+	
+	public String toString(){
+		return this.getX()+","+this.getY();
 	}
 }

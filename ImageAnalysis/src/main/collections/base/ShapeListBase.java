@@ -1,11 +1,10 @@
-package Collections.Base;
+package main.collections.base;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Collections.PixList;
-import ImageObjects.Pix;
-import ImageObjects.Shape;
+import main.imageElements.Pix;
+import main.imageElements.Shape;
 
 public class ShapeListBase{
 	
@@ -30,7 +29,7 @@ public class ShapeListBase{
 	 */
 	public void add(Shape shape){
 		if(aList == null){
-			aList = new ArrayList<>();
+			aList = new ArrayList<Shape>();
 		}
 		this.aList.add(shape);
 	}
@@ -49,7 +48,7 @@ public class ShapeListBase{
 	 * @param pos
 	 */
 	public void remove(int pos){
-		ArrayList<Shape> newAList = new ArrayList<>();
+		ArrayList<Shape> newAList = new ArrayList<Shape>();
 		for(int inx = 0; inx < this.aList.size(); inx++){
 			if(inx != pos){
 				newAList.add(aList.get(inx));
@@ -63,7 +62,7 @@ public class ShapeListBase{
 	 * @param shape
 	 */
 	public void remove(Shape shape){
-		ArrayList<Shape> newAList = new ArrayList<>();
+		ArrayList<Shape> newAList = new ArrayList<Shape>();
 		for(int inx = 0; inx < this.aList.size(); inx++){
 			if(!this.aList.get(inx).sameAs(shape)){
 				newAList.add(this.aList.get(inx));
@@ -95,13 +94,8 @@ public class ShapeListBase{
 	 * @return
 	 */
 	public boolean isEmpty(){
-		if(aList == null || aList.isEmpty()){
-			return true;
-		}
-		return false;
+		return (aList == null || aList.isEmpty());
 	}
-	
-	private void _________________________________________(){}
 	
 	public boolean containsShape(Shape shape){
 		for(int inx = 0 ; inx < this.size(); inx++){

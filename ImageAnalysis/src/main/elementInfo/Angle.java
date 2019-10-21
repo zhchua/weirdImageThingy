@@ -14,6 +14,7 @@ public class Angle extends AngleBase{
 		rerangeAngle();
 	}
 	
+	@Override
 	public void setValue(double dbl){
 		super.setValue(rerangeAngle(dbl));
 	}
@@ -81,10 +82,7 @@ public class Angle extends AngleBase{
 	 * @return
 	 */
 	public boolean isLeft(){
-		if(getValue() > 180 && getValue() < 360){
-			return true;
-		}
-		return false;
+		return (getValue() > 180 && getValue() < 360);
 	}
 	
 	/** Checks if angle has rightward horizontal component.
@@ -93,10 +91,7 @@ public class Angle extends AngleBase{
 	 * @return
 	 */
 	public boolean isRight(){
-		if(getValue() > 0 && getValue() < 180){
-			return true;
-		}
-		return false;
+		return (getValue() > 0 && getValue() < 180);
 	}
 	
 	/** Checks if angle has upward vertical component.
@@ -105,13 +100,8 @@ public class Angle extends AngleBase{
 	 * @return
 	 */
 	public boolean isUp(){
-		if(getValue() >= 0 && getValue() < 90){
-			return true;
-		}
-		if(getValue() > 270 && getValue() < 360){
-			return true;
-		}
-		return false;
+		return ((getValue() > 270 && getValue() < 360) 
+				|| (getValue() >= 0 && getValue() < 90));
 	}
 	
 	/** Checks if angle has downward vertical component.
@@ -120,10 +110,7 @@ public class Angle extends AngleBase{
 	 * @return
 	 */
 	public boolean isDown(){
-		if(getValue() > 90 && getValue() < 270){
-			return true;
-		}
-		return false;
+		return (getValue() > 90 && getValue() < 270);
 	}
 	
 

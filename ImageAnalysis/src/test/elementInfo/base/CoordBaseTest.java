@@ -3,10 +3,7 @@ package test.elementInfo.base;
 import static org.junit.Assert.*;
 
 import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import main.elementInfo.base.CoordBase;
@@ -31,41 +28,41 @@ public class CoordBaseTest {
 
 	@Test
 	public void testCoordBaseIntInt() {
-		Assert.assertTrue(cb1.getX() == in1 && cb1.getY() == in2);
+		assertTrue(cb1.getX() == in1 && cb1.getY() == in2);
 	}
 
 	@Test
 	public void testCoordBaseCoordBase() {
 		CoordBase cb2 = new CoordBase(cb1);
-		Assert.assertTrue(cb1.sameAs(cb2));
+		assertTrue(cb1.sameAs(cb2));
 	}
 
 	@Test
 	public void testGetX() {
-		Assert.assertEquals(in1, cb1.getX());
+		assertEquals(in1, cb1.getX());
 	}
 
 	@Test
 	public void testGetY() {
-		Assert.assertEquals(in2, cb1.getY());
+		assertEquals(in2, cb1.getY());
 	}
 
 	@Test
 	public void testSetX() {
 		cb1.setX(1337);
-		Assert.assertEquals(1337, cb1.getX());
+		assertEquals(1337, cb1.getX());
 	}
 
 	@Test
 	public void testSetY() {
 		cb1.setY(42069);
-		Assert.assertEquals(42069, cb1.getY());
+		assertEquals(42069, cb1.getY());
 	}
 
 	@Test
 	public void testSetCoord() {
 		cb1.setCoord(42069, 1337);
-		Assert.assertTrue(cb1.getX() == 42069 && cb1.getY() == 1337);
+		assertTrue(cb1.getX() == 42069 && cb1.getY() == 1337);
 	}
 
 	@Test
@@ -73,7 +70,7 @@ public class CoordBaseTest {
 		CoordBase cb2 = new CoordBase(cb1);
 		cb1.setX(cb1.getX()-1);
 		cb1.setX(cb1.getX()+1);
-		Assert.assertTrue(cb1.sameAs(cb2));
+		assertTrue(cb1.sameAs(cb2));
 	}
 
 }

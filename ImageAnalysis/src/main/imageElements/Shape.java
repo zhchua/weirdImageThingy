@@ -1,14 +1,14 @@
-package ImageObjects;
+package main.imageElements;
 
-import Collections.PixList;
-import Image.ImageObj;
-import ImageObjects.Base.ShapeBase;
-import InfoObjects.Colour;
-import InfoObjects.Coord;
+import main.collections.PixList;
+import main.elementInfo.Colour;
+import main.elementInfo.Coord;
+import main.image.ImageObj;
+import main.imageElements.base.ShapeBase;
 
 public class Shape extends ShapeBase {
 	
-	private PixList verticeList;
+	//private PixList verticeList;
 	private PixList edgeList;
 
 	public Shape() {

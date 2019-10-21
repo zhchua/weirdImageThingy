@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.Assert;
 import main.elementInfo.Colour;
 import test.elementInfo.base.ColourBaseTest;
 
@@ -26,11 +25,10 @@ public class ColourTest extends ColourBaseTest {
 		fl4 = Math.random() * 255;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testColourFloatFloatFloatFloat() {
 		col = new Colour(fl1, fl2, fl3, fl4);
-		Assert.assertTrue(col.getA() == fl1 && col.getR() == fl2 && col.getG() == fl3
+		assertTrue(col.getA() == fl1 && col.getR() == fl2 && col.getG() == fl3
 				&& col.getB() == fl4);
 	}
 

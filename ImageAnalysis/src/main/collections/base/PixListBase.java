@@ -1,9 +1,10 @@
-package Collections.Base;
+package main.collections.base;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ImageObjects.Pix;
+import main.imageElements.Pix;
+
 
 public class PixListBase{
 	
@@ -20,15 +21,13 @@ public class PixListBase{
 	 * @param otherPixList
 	 */
 	public PixListBase(PixListBase pixListBase){
-		this.aList = new ArrayList<>();
+		this.aList = new ArrayList<Pix>();
 		for(int pixInx = 0; pixInx < pixListBase.size(); pixInx++){
 			this.aList.add(new Pix(pixListBase.get(pixInx)));
 		}
 	}
 	
-	private void _____GETTERS_AND_SETTERS_____(){}
-	
-	public ArrayList<Pix> getList(){
+	public List<Pix> getList(){
 		return this.aList;
 	}
 	
@@ -38,7 +37,7 @@ public class PixListBase{
 	 */
 	public void add(Pix pix){
 		if(aList == null){
-			aList = new ArrayList<>();
+			aList = new ArrayList<Pix>();
 		}
 		this.aList.add(pix);
 	}
@@ -57,7 +56,7 @@ public class PixListBase{
 	 * @param pos
 	 */
 	public void remove(int pos){
-		ArrayList<Pix> newAList = new ArrayList<>();
+		ArrayList<Pix> newAList = new ArrayList<Pix>();
 		for(int inx = 0; inx < this.aList.size(); inx++){
 			if(inx != pos){
 				newAList.add(aList.get(inx));
@@ -71,7 +70,7 @@ public class PixListBase{
 	 * @param pix
 	 */
 	public void remove(Pix pix){
-		ArrayList<Pix> newAList = new ArrayList<>();
+		ArrayList<Pix> newAList = new ArrayList<Pix>();
 		for(int inx = 0; inx < this.aList.size(); inx++){
 			if(!this.aList.get(inx).sameAs(pix)){
 				newAList.add(this.aList.get(inx));
@@ -103,10 +102,7 @@ public class PixListBase{
 	 * @return
 	 */
 	public boolean isEmpty(){
-		if(aList == null || aList.isEmpty()){
-			return true;
-		}
-		return false;
+		return (aList == null || aList.isEmpty());
 	}
 	
 	

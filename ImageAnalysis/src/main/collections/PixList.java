@@ -1,18 +1,18 @@
-package Collections;
+package main.collections;
 
-import Collections.Base.PixListBase;
-import ImageObjects.Pix;
-import InfoObjects.Coord;
+import java.util.ArrayList;
+
+import main.collections.base.PixListBase;
+import main.elementInfo.Coord;
+import main.imageElements.Pix;
 
 public class PixList extends PixListBase {
 
 	public PixList() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public PixList(PixListBase pixListBase) {
 		super(pixListBase);
-		// TODO Auto-generated constructor stub
 	}
 
 	

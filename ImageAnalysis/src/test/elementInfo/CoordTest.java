@@ -2,12 +2,11 @@ package test.elementInfo;
 
 import static org.junit.Assert.*;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.elementInfo.Angle;
 import main.elementInfo.Coord;
-import test.elementInfo.base.CoordBaseTest;
 
 public class CoordTest{
 
@@ -21,68 +20,74 @@ public class CoordTest{
 
 	@Test
 	public void testCoordIntInt() {
-		Assert.assertTrue( "whats this for", cd.getX() == 1 && cd.getY() == 1);
+		assertTrue( "whats this for", cd.getX() == 1 && cd.getY() == 1);
 	}
 
 	@Test
 	public void testCoordCoordBase() {
 		Coord ncd = new Coord(cd);
-		Assert.assertTrue(null, cd.sameAs(ncd) && cd!=ncd);
+		assertTrue(null, cd.sameAs(ncd) && cd!=ncd);
 	}
 
 	@Test
 	public void testIsLeftOf() {
 		Coord lcd = new Coord(0,1);
-		Assert.assertTrue(lcd.isLeftOf(cd));
+		assertTrue(lcd.isLeftOf(cd));
 	}
 
 	@Test
 	public void testIsRightOf() {
 		Coord rcd = new Coord(2,1);
-		Assert.assertTrue(rcd.isRightOf(cd));
+		assertTrue(rcd.isRightOf(cd));
 	}
 
 	@Test
 	public void testIsAbove() {
 		Coord ucd = new Coord(1,0);
-		Assert.assertTrue(ucd.isAbove(cd));
+		assertTrue(ucd.isAbove(cd));
 	}
 
 	@Test
 	public void testIsBelow() {
 		Coord dcd = new Coord(1,2);
-		Assert.assertTrue(dcd.isBelow(cd));
+		assertTrue(dcd.isBelow(cd));
 	}
 
 	@Test
 	public void testGetYDispTo() {
 		Coord ycd = new Coord( 420, 69);
-		Assert.assertEquals(68, cd.getYDispTo(ycd));
+		assertEquals(68, cd.getYDispTo(ycd));
 	}
 
 	@Test
 	public void testGetXDispTo() {
-		fail("Not yet implemented"); // TODO
+		Coord xcd = new Coord(1337, 42069);
+		assertEquals(1336, cd.getXDispTo(xcd));
 	}
 
 	@Test
 	public void testGetDistanceTo() {
-		fail("Not yet implemented"); // TODO
+		Coord xycd = new Coord(11,11);
+		assertEquals(14.1421356237309, cd.getDistanceBetween(xycd), 0.0001);
 	}
-
+	
 	@Test
 	public void testGetAngleTo() {
-		fail("Not yet implemented"); // TODO
+		Coord acd = new Coord(0,0);
+		assertEquals(315, cd.getAngleTo(acd).getValue(), 0.0001);
 	}
 
 	@Test
 	public void testIsApproxAngleTo() {
-		fail("Not yet implemented"); // TODO
+		Coord acd = new Coord(1,0);
+		// 2,0 45
+		assertTrue(cd.isApproxAngleTo(acd, new Angle(0)));
 	}
 
 	@Test
 	public void testIsAdjacentTo() {
-		fail("Not yet implemented"); // TODO
+		Coord adjcd = new Coord(2,1);
+		assertTrue(cd.isAdjacentTo(adjcd));
 	}
 
 	@Test

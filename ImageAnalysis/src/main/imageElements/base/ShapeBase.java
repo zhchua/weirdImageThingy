@@ -1,13 +1,6 @@
-package ImageObjects.Base;
+package main.imageElements.base;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import Collections.PixList;
-import Image.ImageObj;
-import ImageObjects.Pix;
-import InfoObjects.Colour;
-import InfoObjects.Coord;
+import main.collections.PixList;
 
 public class ShapeBase {
 
@@ -30,9 +23,6 @@ public class ShapeBase {
 	}
 	
 	public boolean sameAs(ShapeBase otherShape){
-		if(this.getPixList().sameAs(otherShape.getPixList())){
-			return true;
-		}
-		return false;
+		return this.getPixList().sameAs(otherShape.getPixList());
 	}
 }

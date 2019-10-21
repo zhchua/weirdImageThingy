@@ -1,77 +1,62 @@
 package main.elementInfo.base;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ColourBase {
+import main.exceptions.ARGBRangeException;
+import main.utility.BaseObject;
+
+public class ColourBase extends BaseObject{
 
 	private double a;
 	private double r;
 	private double g;
 	private double b;
 
-
 	public ColourBase(double a, double r, double g, double b){
-		this.r = r;
-		this.g = g;
-		this.b = b;
-		this.a = a;
-		invalidNumberCheck();
-	}
-
-	public ColourBase(int a, int r, int g, int b){
-		this.r = r;
-		this.g = g;
-		this.b = b;
-		this.a = a;
-		invalidNumberCheck();
+		if(argbIsValid(a, r, g, b)){
+			this.setARGB(a, r, g, b);
+		}
 	}
 
 	public ColourBase(double r, double g, double b){
-		this.r = r;
-		this.g = g;
-		this.b = b;
-		this.a = 0;
-		invalidNumberCheck();
+		if(argbIsValid(0, r, g, b)){
+			this.setARGB(0, r, g, b);
+		}
 	}
-
-	public ColourBase(int r, int g, int b){
-		this.r = r;
-		this.g = g;
-		this.b = b;
-		this.a = 0;
-		invalidNumberCheck();
-	}
-
+	
 	/** Creates a strict copy of given Colour.
 	 * 
 	 * @param colour
 	 */
-	public ColourBase(ColourBase colour){
-		this.a = colour.getA();
-		this.r = colour.getR();
-		this.g = colour.getG();
-		this.b = colour.getB();
-		invalidNumberCheck();
+	public ColourBase(ColourBase givenColourBase){
+		super(givenColourBase);
+
+		if(argbIsValid(givenColourBase)){
+			this.setARGB(givenColourBase.getA(), givenColourBase.getR()
+						, givenColourBase.getG(), givenColourBase.getB());
+		}
 	}
 
-	private void _____GETTERS_AND_SETTERS_____(){}
-
-	/** Checks ARGB for values <0 or >255. Throw exception if invalid values found.
+	/** Checks ARGB for nullity and values <0 or >255. Throw exception if invalid values found.
 	 * 
 	 */
-	private void invalidNumberCheck(){
-		if(this.a < 0 || this.a > 255){
-			throw new IllegalArgumentException("Alpha is out of range.");
+	private boolean argbIsValid(double a, double r, double g, double b){
+		double[] argbArr = {a, r, g, b};
+		for(int i = 0; i < 4; i++){
+			if(argbArr[i] < 0 || argbArr[i] > 255){
+				throw new ARGBRangeException();
+			}
 		}
-		if(this.r < 0 || this.r > 255){
-			throw new IllegalArgumentException("Red is out of range.");
-		}
-		if(this.g < 0 || this.g > 255){
-			throw new IllegalArgumentException("Green is out of range.");
-		}
-		if(this.b < 0 || this.b > 255){
-			throw new IllegalArgumentException("Blue is out of range.");
-		}
+		return true;
+	}
+	
+	/** Checks ARGB for nullity and values <0 or >255. Throw exception if invalid values found.
+	 * 
+	 */
+	private boolean argbIsValid(ColourBase givenColourBase){
+		return argbIsValid(givenColourBase.getA(), givenColourBase.getR()
+				, givenColourBase.getG(), givenColourBase.getB());
 	}
 	
 	public void setR(double r){
@@ -117,32 +102,13 @@ public class ColourBase {
 		return this.a;
 	}
 
-	/** Determines equality between two doubles to 0.001% precision of either value
-	 * 
-	 * @param fl1
-	 * @param fl2
-	 * @return
-	 */
-	private boolean flEq(double fl1, double fl2){
-		double errMar1 = ((0.000001) * fl1);
-		double errMar2 = ((0.000001) * fl2);
-
-		if(Math.abs(fl1 - fl2) == 0 || Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2){
-			return true;
-		}
-		return false;
-	}
-
 	/** Checks if this colour has the same ARGB values as given colour.
 	 * 
 	 * @param otherColour
 	 * @return
 	 */
 	public boolean sameAs(ColourBase otherColour){
-		if(this.isSameAlpha(otherColour) && this.isSameRGB(otherColour)){
-			return true;
-		}
-		return false;
+		return (this.isSameAlpha(otherColour) && this.isSameRGB(otherColour));
 	}
 
 
@@ -154,12 +120,9 @@ public class ColourBase {
 	 * @return
 	 */
 	public boolean isSameRGB(ColourBase otherColour){
-		if(flEq(this.getR(), otherColour.getR())
+		return (flEq(this.getR(), otherColour.getR())
 				&& flEq(this.getG(), otherColour.getG())
-				&& flEq(this.getB(), otherColour.getB())){
-			return true;
-		}
-		return false;
+				&& flEq(this.getB(), otherColour.getB()));
 	}
 
 	/** Checks if given colour has same Alpha channel value as this colour.
@@ -169,10 +132,7 @@ public class ColourBase {
 	 * @return
 	 */
 	public boolean isSameAlpha(ColourBase otherColour){
-		if(flEq(this.getA(), otherColour.getA())){
-			return true;
-		}
-		return false;
+		return flEq(this.getA(), otherColour.getA());
 	}
 
 	/** Returns the integer of n to the power of p. Integers only.
@@ -201,7 +161,7 @@ public class ColourBase {
 	 * @param num
 	 * @return
 	 */
-	public ArrayList<Integer> getBitsArray(){
+	public List<Integer> getBitsArray(){
 		ArrayList<Integer> bits = new ArrayList<Integer>();
 		int col = 0;
 		int[] colours = {(int) this.getA()

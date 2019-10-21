@@ -1,10 +1,10 @@
-package ImageObjects;
+package main.imageElements;
 
-import Collections.ShapeList;
-import Image.ImageObj;
-import ImageObjects.Base.PixBase;
-import InfoObjects.Colour;
-import InfoObjects.Coord;
+import main.collections.ShapeList;
+import main.elementInfo.Colour;
+import main.elementInfo.Coord;
+import main.image.ImageObj;
+import main.imageElements.base.PixBase;
 
 public class Pix extends PixBase {
 
@@ -76,11 +76,8 @@ public class Pix extends PixBase {
 	 * @return
 	 */
 	public boolean shouldbeSameShapeAs(Pix otherPix){
-		if(!this.sameAs(otherPix) && this.isSameColourAs(otherPix) 
-				&& this.isAdjacentTo(otherPix)){
-			return true;	
-		}
-		return false;
+		return (!this.sameAs(otherPix) && this.isSameColourAs(otherPix) 
+				&& this.isAdjacentTo(otherPix));
 	}
 	
 	/** Checks if this Pix is located at given coord. 

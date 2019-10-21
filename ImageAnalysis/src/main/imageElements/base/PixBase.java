@@ -1,17 +1,13 @@
-package ImageObjects.Base;
+package main.imageElements.base;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
-import InfoObjects.Colour;
-import InfoObjects.Coord;
+import main.elementInfo.Colour;
+import main.elementInfo.Coord;
 
 public class PixBase {
 
-	private Colour colour;
-	private Coord coord;
+	public Colour colour;
+	public Coord coord;
+	
 	
 	public PixBase(Colour colour, Coord coord){
 		this.colour = colour;
@@ -45,9 +41,8 @@ public class PixBase {
 	 * @return
 	 */
 	public boolean sameAs(PixBase otherPix){
-		if(this.colour.sameAs(otherPix.getColour()) && this.getCoord().sameAs(otherPix.getCoord())){
-			return true;
-		}
-		return false;
+		return (this.colour.sameAs(otherPix.getColour()) 
+				&& this.getCoord().sameAs(otherPix.getCoord()));
 	}
+	
 }
