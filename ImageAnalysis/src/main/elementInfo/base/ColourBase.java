@@ -58,34 +58,40 @@ public class ColourBase extends BaseObject{
 		return argbIsValid(givenColourBase.getA(), givenColourBase.getR()
 				, givenColourBase.getG(), givenColourBase.getB());
 	}
+
+	public void setA(double a){
+		if(argbIsValid(a, r, g, b)){
+			this.a = a;
+		}
+	}
 	
 	public void setR(double r){
-		this.r = r;
+		if(argbIsValid(a, r, g, b)){
+			this.r = r;
+		}
 	}
 
 	public void setG(double g){
-		this.g = g;
+		if(argbIsValid(a, r, g, b)){
+			this.g = g;
+		}
 	}
 
 	public void setB(double b){
-		this.b = b;
-	}
-
-	public void setA(double a){
-		this.a = a;
+		if(argbIsValid(a, r, g, b)){
+			this.b = b;
+		}
 	}
 
 	public void setRGB(double r, double g, double b){
-		setR(r);
-		setG(g);
-		setB(b);
+		setARGB(this.getA(), r, g, b);
 	}
 
 	public void setARGB(double a, double r, double g, double b){
+		setA(a);
 		setR(r);
 		setG(g);
 		setB(b);
-		setA(a);
 	}
 
 	public double getR(){
@@ -95,9 +101,11 @@ public class ColourBase extends BaseObject{
 	public double getG(){
 		return this.g;
 	}
+	
 	public double getB(){
 		return this.b;
 	}
+	
 	public double getA(){
 		return this.a;
 	}
@@ -110,8 +118,6 @@ public class ColourBase extends BaseObject{
 	public boolean sameAs(ColourBase otherColour){
 		return (this.isSameAlpha(otherColour) && this.isSameRGB(otherColour));
 	}
-
-
 
 	/** Checks if given colour has same RGB (excludes A) as this colour.
 	 * Calls flEq.

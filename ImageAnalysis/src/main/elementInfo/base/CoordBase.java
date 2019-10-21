@@ -42,22 +42,6 @@ public class CoordBase extends BaseObject{
 		setY(y);
 	}
 	
-	/*
-	/** Determines equality between two floats to 0.001% precision of either value
-	 * 
-	 * @param fl1
-	 * @param fl2
-	 * @return
-	 */
-	/*
-	private boolean flEq(float fl1, float fl2){
-		float errMar1 = (float) ((0.000001) * fl1);
-		float errMar2 = (float) ((0.000001) * fl2);
-		
-		return (Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1-fl2) < errMar2);
-	}
-	*/
-	
 	/** Compares given coord's X and Y with this coord to check if same.
 	 * 
 	 * @param otherCoord
