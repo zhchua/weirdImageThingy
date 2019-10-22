@@ -25,16 +25,17 @@ public class ColourBaseTest extends BaseTestObject {
 	
 	@Before
 	public void setUp() throws Exception {
-		db1 =  Math.random() * 255;
-		db2 =  Math.random() * 255;
-		db3 =  Math.random() * 255;
-		db4 =  Math.random() * 255;
-		int1 = (int) (Math.random() * 255);
-		int2 = (int) (Math.random() * 255);
-		int3 = (int) (Math.random() * 255);
-		int4 = (int) (Math.random() * 255);
+		db1 =  rndDbl(0,255);
+		db2 =  rndDbl(0,255);
+		db3 =  rndDbl(0,255);
+		db4 =  rndDbl(0,255);
+		int1 = rndInt(0,255);
+		int2 = rndInt(0,255);
+		int3 = rndInt(0,255);
+		int4 = rndInt(0,255);
 		
 		cb = new ColourBase(db1,db2,db3,db4);
+		this.prnObjInfo("ColourBaseTest");
 	}
 
 	@After

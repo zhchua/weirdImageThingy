@@ -1,9 +1,12 @@
 package main.elementInfo.base;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import main.exceptions.ARGBRangeException;
+import main.exceptions.NullObjectException;
+import main.exceptions.*;
 import main.utility.BaseObject;
 
 public class ColourBase extends BaseObject{
@@ -112,33 +115,36 @@ public class ColourBase extends BaseObject{
 
 	/** Checks if this colour has the same ARGB values as given colour.
 	 * 
-	 * @param otherColour
+	 * @param givenColour
 	 * @return
 	 */
-	public boolean sameAs(ColourBase otherColour){
-		return (this.isSameAlpha(otherColour) && this.isSameRGB(otherColour));
+	public boolean sameAs(ColourBase givenColour){
+		return (this.isSameAlpha(givenColour) && this.isSameRGB(givenColour));
 	}
 
 	/** Checks if given colour has same RGB (excludes A) as this colour.
 	 * Calls flEq.
 	 * 
-	 * @param otherColour
+	 * @param givenColour
 	 * @return
 	 */
-	public boolean isSameRGB(ColourBase otherColour){
-		return (flEq(this.getR(), otherColour.getR())
-				&& flEq(this.getG(), otherColour.getG())
-				&& flEq(this.getB(), otherColour.getB()));
+	public boolean isSameRGB(ColourBase givenColour){
+		return (flEq(this.getR(), givenColour.getR())
+				&& flEq(this.getG(), givenColour.getG())
+				&& flEq(this.getB(), givenColour.getB()));
 	}
 
 	/** Checks if given colour has same Alpha channel value as this colour.
 	 * Calls flEq.
 	 * 
-	 * @param otherColour
+	 * @param givenColour
 	 * @return
 	 */
-	public boolean isSameAlpha(ColourBase otherColour){
-		return flEq(this.getA(), otherColour.getA());
+	public boolean isSameAlpha(ColourBase givenColour){
+		if(givenColour == null){
+			throw new NullObjectException();
+		}
+		return flEq(this.getA(), givenColour.getA());
 	}
 
 	/** Returns the integer of n to the power of p. Integers only.
