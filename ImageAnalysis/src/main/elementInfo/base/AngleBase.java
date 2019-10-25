@@ -39,21 +39,5 @@ public class AngleBase extends BaseObject{
 	public double inRadians(){
 		return Math.toRadians(this.value);
 	}
-	
-	/** Checks if given Angle has the same attribute values as this Angle.
-	 * 
-	 * @param otherAngle
-	 * @return
-	 */
-	public boolean sameAs(AngleBase givenAngle){
-		if(givenAngle == null){
-			return false;
-		}
-		else return flEq(this.getValue() , givenAngle.getValue());
-	}
-	
-	public String toString(){
-		return Double.toString(this.getValue()) + " " + "degrees";
-	}
 }
 	

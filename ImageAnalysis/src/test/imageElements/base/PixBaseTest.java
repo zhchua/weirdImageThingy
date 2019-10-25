@@ -30,8 +30,7 @@ public class PixBaseTest {
 	@Test
 	public void testPixBasePixBase() {
 		PixBase pb2 = new PixBase(pb);
-		assertTrue(pb2.getColour() != col && pb2.getCoord() != cod
-				&& pb2.getColour().sameAs(col) && pb2.getCoord().sameAs(cod));
+		assertTrue(pb.equals(pb2));
 	}
 
 	@Test
@@ -61,7 +60,7 @@ public class PixBaseTest {
 	@Test
 	public void testSameAs() {
 		PixBase pb2 = new PixBase(pb);
-		assertTrue(pb.sameAs(pb2) && pb != pb2);
+		assertTrue(pb.equals(pb2) && pb != pb2);
 	}
 
 }

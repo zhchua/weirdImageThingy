@@ -41,13 +41,4 @@ public class CoordBase extends BaseObject{
 		setX(x);
 		setY(y);
 	}
-	
-	/** Compares given coord's X and Y with this coord to check if same.
-	 * 
-	 * @param otherCoord
-	 * @return
-	 */
-	public boolean sameAs(CoordBase otherCoord){
-		return (this.getX() == otherCoord.getX() && this.getY() == otherCoord.getY());
-	}
 }

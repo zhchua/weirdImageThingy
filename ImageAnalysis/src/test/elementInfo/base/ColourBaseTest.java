@@ -35,7 +35,8 @@ public class ColourBaseTest extends BaseTestObject {
 		int4 = rndInt(0,255);
 		
 		cb = new ColourBase(db1,db2,db3,db4);
-		this.prnObjInfo("ColourBaseTest");
+		//this.prnObjInfo();
+		cb.prnObjInfo();
 	}
 
 	@After
@@ -171,7 +172,7 @@ public class ColourBaseTest extends BaseTestObject {
 		colourBase.setA(colourBase.getA() + 1);
 		
 		System.out.println(colourBase == colourBase2);
-		assertTrue(colourBase.sameAs(colourBase2));
+		assertTrue(colourBase.equals(colourBase2));
 	}
 
 	@Test

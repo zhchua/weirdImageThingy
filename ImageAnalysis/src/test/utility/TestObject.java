@@ -28,4 +28,12 @@ public class TestObject extends BaseObject {
 		super(object);
 	}
 
+	public TestObject2 getTo2() {
+		return to2;
+	}
+
+	public void setTo2(TestObject2 to2) {
+		this.to2 = to2;
+	}
+
 }

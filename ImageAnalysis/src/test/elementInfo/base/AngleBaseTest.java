@@ -31,6 +31,18 @@ public class AngleBaseTest {
 		angleBase.setValue(Math.random());
 		assertNotEquals(angleBase.getValue(), angleBase2.getValue());
 	}
+	
+	@Test
+	public void testAngleBase_DeepCopy_eqsgn() {
+		AngleBase angleBase2 = new AngleBase(angleBase);
+		assertFalse(angleBase == angleBase2);
+	}
+	
+	@Test
+	public void testAngleBase_DeepCopy_eq() {
+		AngleBase angleBase2 = new AngleBase(angleBase);
+		assertTrue(angleBase.equals(angleBase2));
+	}
 
 	@SuppressWarnings("unused")
 	@Test(expected = NullConstructorException.class)
@@ -62,18 +74,18 @@ public class AngleBaseTest {
 	public void testSameAs() {
 		AngleBase angleBase2 = new AngleBase(flangle - 1);
 		angleBase2.setValue(angleBase2.getValue()+1);
-		assertTrue(angleBase.sameAs(angleBase2));
+		assertTrue(angleBase.equals(angleBase2));
 	}
 	
 	@Test
 	public void testSameAs_Negative() {
 		AngleBase angleBase2 = new AngleBase(flangle - 1);
-		assertFalse(angleBase.sameAs(angleBase2));
+		assertFalse(angleBase.equals(angleBase2));
 	}
 	
 	@Test
 	public void testSameAs_Null() {
 		AngleBase angleBase2 = null;
-		assertFalse(angleBase.sameAs(angleBase2));
+		assertFalse(angleBase.equals(angleBase2));
 	}
 }

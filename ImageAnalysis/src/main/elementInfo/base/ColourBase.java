@@ -1,12 +1,10 @@
 package main.elementInfo.base;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import main.exceptions.ARGBRangeException;
 import main.exceptions.NullObjectException;
-import main.exceptions.*;
 import main.utility.BaseObject;
 
 public class ColourBase extends BaseObject{
@@ -111,15 +109,6 @@ public class ColourBase extends BaseObject{
 	
 	public double getA(){
 		return this.a;
-	}
-
-	/** Checks if this colour has the same ARGB values as given colour.
-	 * 
-	 * @param givenColour
-	 * @return
-	 */
-	public boolean sameAs(ColourBase givenColour){
-		return (this.isSameAlpha(givenColour) && this.isSameRGB(givenColour));
 	}
 
 	/** Checks if given colour has same RGB (excludes A) as this colour.

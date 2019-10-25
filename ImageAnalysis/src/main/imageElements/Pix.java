@@ -45,7 +45,7 @@ public class Pix extends PixBase {
 	 * @return
 	 */
 	public boolean isSameARGB(PixBase otherPix){
-		return this.getColour().sameAs(otherPix.getColour());
+		return this.getColour().equals(otherPix.getColour());
 	}
 	
 	/** Checks if this pix and given pix are next to each other.
@@ -76,7 +76,7 @@ public class Pix extends PixBase {
 	 * @return
 	 */
 	public boolean shouldbeSameShapeAs(Pix otherPix){
-		return (!this.sameAs(otherPix) && this.isSameColourAs(otherPix) 
+		return (!this.equals(otherPix) && this.isSameColourAs(otherPix) 
 				&& this.isAdjacentTo(otherPix));
 	}
 	
@@ -86,7 +86,7 @@ public class Pix extends PixBase {
 	 * @return
 	 */
 	public boolean isAtCoord(Coord otherCoord){
-		return this.getCoord().sameAs(otherCoord);
+		return this.getCoord().equals(otherCoord);
 	}
 	
 	/** Checks if this pix is in given shape.
@@ -161,7 +161,7 @@ public class Pix extends PixBase {
 						this.getCoord().getX() + chkX, 
 						this.getCoord().getY() + chkY);
 				if(shape.getPix(chkCoord) != null
-						&& !shape.getPix(chkCoord).sameAs(this)
+						&& !shape.getPix(chkCoord).equals(this)
 						&& shape.getPix(chkCoord).isAdjacentTo(this)
 						&& shape.getPix(chkCoord).isSameColourAs(this)){
 					return true;

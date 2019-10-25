@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.imageElements.Pix;
+import main.utility.BaseObject;
 
 
-public class PixListBase{
+public class PixListBase extends BaseObject{
 	
 	private ArrayList<Pix> aList;
 	
@@ -72,7 +73,7 @@ public class PixListBase{
 	public void remove(Pix pix){
 		ArrayList<Pix> newAList = new ArrayList<Pix>();
 		for(int inx = 0; inx < this.aList.size(); inx++){
-			if(!this.aList.get(inx).sameAs(pix)){
+			if(!this.aList.get(inx).equals(pix)){
 				newAList.add(this.aList.get(inx));
 			}
 		}
@@ -114,28 +115,11 @@ public class PixListBase{
 	 */
 	public boolean contains(Pix pix){
 		for(int inx = 0; inx < this.size(); inx++){
-			if(this.get(inx).equals(pix) || this.get(inx).sameAs(pix)){
+			if(this.get(inx).equals(pix) || this.get(inx)==pix){
 				return true;
 			}
 		}
+		
 		return false;
-	}
-	
-	public boolean sameAs(PixListBase otherPixListBase){
-		if(otherPixListBase.getList() == null && this.getList() == null){
-			return true;
-		}
-		if(otherPixListBase.isEmpty() && this.isEmpty()){
-			return true;
-		}
-		if(this.size() != otherPixListBase.size()){
-			return false;
-		}
-		for(int pixInx = 0; pixInx < this.size(); pixInx++){
-			if(!this.contains(otherPixListBase.get(pixInx))){
-				return false;
-			}
-		}
-		return true;
 	}
 }

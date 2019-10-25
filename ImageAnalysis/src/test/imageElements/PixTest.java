@@ -2,36 +2,57 @@ package test.imageElements;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Field;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import main.elementInfo.Colour;
 import main.elementInfo.Coord;
+import main.imageElements.PTest;
 import main.imageElements.Pix;
+import test.utility.BaseTestObject;
+import main.exceptions.NullConstructorException;
 
-public class PixTest {
+public class PixTest extends BaseTestObject{
 
 	private Colour col;
 	private Coord cod;
 	private Pix px;
+	
+	private PTest pp;
 	
 	@Before
 	public void setUp() throws Exception {
 		col = new Colour(1,2,3,4);
 		cod = new Coord(5,6);
 		px = new Pix(col, cod);
+		px.prnObjInfo();
+		
+		//pp = new PTest(px);
+		//pp.prnObjInfo();
+		//px.prnObjInfo();
 	}
 
 	@Test
 	public void testPixColourCoord() {
 		assertTrue(px.getColour() == col && px.getCoord() == cod);
 	}
+	
+	@Test(expected = NullConstructorException.class)
+	public void testPixColourCoord_colNull() {
+		Pix px2 = new Pix(null, cod);
+		
+		px2.prnObjInfo();
+		Field[] fa = px.getClass().getDeclaredFields();
+		
+	}
 
 	@Test
 	public void testPixPix() {
 		Pix npx = new Pix(px);
 		assertTrue(npx != px 
-				&& npx.getColour().sameAs(col) && npx.getCoord().sameAs(cod));
+				&& npx.getColour().equals(col) && npx.getCoord().equals(cod));
 	}
 
 	@Test

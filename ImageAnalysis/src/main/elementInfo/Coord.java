@@ -187,11 +187,11 @@ public class Coord extends CoordBase {
 		for(int chkX = -1; chkX < 2; chkX++){
 			for(int chkY = -1; chkY < 2; chkY++){
 				chkCoord.setCoord(otherCoord.getX()+chkX, otherCoord.getY()+chkY);
-				if(!this.sameAs(chkCoord) 
+				if(!this.equals(chkCoord) 
 						&& this.getAngleTo(chkCoord).getValue() <= minAng ){
 					minAng = this.getAngleTo(chkCoord).getValue();
 				}
-				if( !this.sameAs(chkCoord) 
+				if( !this.equals(chkCoord) 
 						&& this.getAngleTo(chkCoord).getValue() >= maxAng){
 					maxAng = this.getAngleTo(chkCoord).getValue();
 				}
@@ -213,7 +213,7 @@ public class Coord extends CoordBase {
 		for(int chkX = -1; chkX < 2; chkX++){
 			for(int chkY = -1; chkY < 2; chkY++){
 				chkCoord.setCoord(this.getX()+chkX, this.getY()+chkY);
-				if(chkCoord != this && otherCoord.sameAs(chkCoord)){
+				if(chkCoord != this && otherCoord.equals(chkCoord)){
 					return true;
 				}
 			}

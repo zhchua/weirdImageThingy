@@ -27,8 +27,4 @@ public class Colour extends ColourBase {
 	public Colour(Colour colour){
 		super(colour);
 	}
-
-	public String toString(){
-		return this.getA()+","+this.getR()+","+this.getG()+","+this.getB();
-	}
 }

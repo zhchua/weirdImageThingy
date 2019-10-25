@@ -2,13 +2,16 @@ package test.elementInfo;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import main.elementInfo.Colour;
-import test.elementInfo.base.ColourBaseTest;
+import test.utility.BaseTestObject;
 
-public class ColourTest extends ColourBaseTest {
+public class ColourTest extends BaseTestObject {
 
 	public Colour col;
 	public double fl1;
@@ -32,6 +35,15 @@ public class ColourTest extends ColourBaseTest {
 				&& col.getB() == fl4);
 	}
 
+	@Test
+	public void testColourFloatFloatFloatFloat_eq() {
+		col = new Colour(fl1, fl2, fl3, fl4);
+		Colour col2 = new Colour(fl1, fl2, fl3, fl4);
+		col.prnObjInfo();
+		col2.prnObjInfo();
+		assertTrue(col.equals(col2));
+	}
+	
 	@Test
 	public void testColourIntIntIntInt() {
 		fail("Not yet implemented"); // TODO

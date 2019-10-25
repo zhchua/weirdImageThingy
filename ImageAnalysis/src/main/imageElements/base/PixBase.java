@@ -2,8 +2,9 @@ package main.imageElements.base;
 
 import main.elementInfo.Colour;
 import main.elementInfo.Coord;
+import main.utility.BaseObject;
 
-public class PixBase {
+public class PixBase extends BaseObject{
 
 	public Colour colour;
 	public Coord coord;
@@ -12,6 +13,7 @@ public class PixBase {
 	public PixBase(Colour colour, Coord coord){
 		this.colour = colour;
 		this.coord = coord;
+		this.denyNullArgs();
 	}
 	
 	public PixBase(PixBase pix){
@@ -34,15 +36,4 @@ public class PixBase {
 	public void setCoord(Coord coord){
 		this.coord = coord;
 	}
-	
-	/** Checks if given pix has the same shape and coord as this pix.
-	 * 
-	 * @param otherPix
-	 * @return
-	 */
-	public boolean sameAs(PixBase otherPix){
-		return (this.colour.sameAs(otherPix.getColour()) 
-				&& this.getCoord().sameAs(otherPix.getCoord()));
-	}
-	
 }

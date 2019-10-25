@@ -7,19 +7,24 @@ import org.junit.Before;
 import org.junit.Test;
 
 import main.elementInfo.base.CoordBase;
+import test.utility.BaseTestObject;
 
-public class CoordBaseTest {
+public class CoordBaseTest extends BaseTestObject {
 	
 	private int in1;
 	private int in2;
+	
+	private double db;
 	
 	private CoordBase cb1;
 	
 	@Before
 	public void setUp() throws Exception {
-		in1 = (int) (Math.random()*10000);
-		in2 = (int) (Math.random()*10000);
+		in1 = rndInt();
+		in2 = rndInt();
+		db = rndDbl();
 		cb1 = new CoordBase(in1, in2);
+		this.prnObjInfo();
 	}
 
 	@After
@@ -34,7 +39,7 @@ public class CoordBaseTest {
 	@Test
 	public void testCoordBaseCoordBase() {
 		CoordBase cb2 = new CoordBase(cb1);
-		assertTrue(cb1.sameAs(cb2));
+		assertTrue(cb1.equals(cb2));
 	}
 
 	@Test
@@ -70,7 +75,7 @@ public class CoordBaseTest {
 		CoordBase cb2 = new CoordBase(cb1);
 		cb1.setX(cb1.getX()-1);
 		cb1.setX(cb1.getX()+1);
-		assertTrue(cb1.sameAs(cb2));
+		assertTrue(cb1.equals(cb2));
 	}
 
 }

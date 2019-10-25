@@ -8,8 +8,9 @@ import org.junit.Test;
 
 import main.elementInfo.Angle;
 import test.elementInfo.base.AngleBaseTest;
+import test.utility.BaseTestObject;
 
-public class AngleTest extends AngleBaseTest {
+public class AngleTest extends BaseTestObject{
 
 	double flNeg;
 	double fl1;
@@ -31,7 +32,7 @@ public class AngleTest extends AngleBaseTest {
 	@Test
 	public void testAngleAngle() {
 		Angle ang2 = new Angle(angle);
-		assertTrue(ang2.sameAs(angle) && ang2!=angle);
+		assertTrue(ang2.equals(angle) && ang2!=angle);
 	}
 
 	@Test

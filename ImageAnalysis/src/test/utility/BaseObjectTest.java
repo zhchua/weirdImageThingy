@@ -69,10 +69,13 @@ public class BaseObjectTest {
 		System.out.println(to.hashCode() + " " + to_2.hashCode());
 		assertFalse(to.equals(to_2));
 	}
-
+	
 	@Test
-	public void testEqualsObject() {
-		fail("Not yet implemented"); // TODO
+	public void testBaseObjectObject_alterObj() {
+		TestObject to_2 = new TestObject();
+		to_2.setTo2(new TestObject2(17));
+		System.out.println(to.hashCode() + " " + to_2.hashCode());
+		assertFalse(to.equals(to_2));
 	}
 
 	@Test

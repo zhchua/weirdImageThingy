@@ -1,7 +1,5 @@
 package main.collections;
 
-import java.util.ArrayList;
-
 import main.collections.base.PixListBase;
 import main.elementInfo.Coord;
 import main.imageElements.Pix;
@@ -24,7 +22,7 @@ public class PixList extends PixListBase {
 	 */
 	public Pix get(Coord coord){
 		for(int pixInx = 0; pixInx < this.size(); pixInx++){
-			if(this.get(pixInx).getCoord() == coord){
+			if(this.get(pixInx).getCoord().equals(coord)){
 				return this.get(pixInx);
 			}
 		}

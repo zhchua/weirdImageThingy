@@ -26,7 +26,7 @@ public class CoordTest{
 	@Test
 	public void testCoordCoordBase() {
 		Coord ncd = new Coord(cd);
-		assertTrue(null, cd.sameAs(ncd) && cd!=ncd);
+		assertTrue(null, cd.equals(ncd) && cd!=ncd);
 	}
 
 	@Test
