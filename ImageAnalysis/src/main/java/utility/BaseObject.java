@@ -43,12 +43,24 @@ public class BaseObject {
 	 * @return Boolean whether given object is the same class as this.
 	 */
 	private boolean isSameClass(Object givenObject){
-		return (givenObject.getClass().getName().equals(this.getClass().getName()));
+		return (givenObject.getClass().equals(this.getClass()));
 	}
 	
+	/** Checks if a given field that is primitive or wrapped primitive  of <br>
+	 * this object and the given object are equal in value.<br>
+	 * For floats and doubles, flEq is used.
+	 * For all other primitives, .equals is used.
+	 * 
+	 * @see #flEq(double, double)
+	 * @param Given field (primitive or wrapped primitive)
+	 * @param Given object whose given field is to be compared with that of this 
+	 * object
+	 * @return Boolean whether given primitive field is equal for both objects.
+	 */
 	private boolean isEqualPrimitiveValue(Field field, Object givenObject){
 		field.setAccessible(true);
 		try{
+			// If field type is float or double, compare values with flEq.
 			if(field.getGenericType() == float.class 
 					|| field.getGenericType() == double.class
 					|| field.getGenericType() == Float.class
@@ -56,7 +68,7 @@ public class BaseObject {
 				return (flEq(field.getDouble(this), field.getDouble(givenObject)));
 			}
 			else{
-				return field.get(this) == field.get(givenObject);
+				return field.get(this).equals(field.get(givenObject));
 			}
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
@@ -67,6 +79,11 @@ public class BaseObject {
 	// to do: add checking for list/arraylist fields (order-sensitive)
 	// to do: add checking for array fields
 	// actually those should be impossible lol too many possibilities
+	/**
+	 * 
+	 * @param Given object for comparison with this object.
+	 * @return Boolean whether both objects are equal
+	 */
 	private boolean isEqualFieldValues(Object givenObject){
 		
 		List<Field> givenFA = this.getAllFields(givenObject);
@@ -92,12 +109,17 @@ public class BaseObject {
 		return true;
 	}
 	
+	/** Get list of all fields in this object, including those inherited from
+	 *  superclasses.
+	 * @see #getAllFields(Object)
+	 * @return List of fields in this object.
+	 */
 	private List<Field> getAllFields(){
 		return getAllFields(this);
 	}
 	
-	/** Get list of all fields in this object. <br>
-	 * This breaks encapsulation but oh well... <br>
+	/** Get list of all fields in the given object, including those inherited from
+	 * superclasses.
 	 * 
 	 * @param Given object
 	 * @return List of fields in given object
@@ -121,14 +143,14 @@ public class BaseObject {
 	 * If a field is floating point (float or double), checks equality with flEq.
 	 * <br>
 	 * Two equal BaseObject-descendants may not have the same hashcode if
-	 * floating point fields are present.
+	 * floating point fields are present.<br>
 	 * 
 	 * @param An object to compare field equality with
 	 * @return Boolean whether objects are field-equal
 	 */
 	@Override
 	public boolean equals(Object givenObject){
-		if(!this.isComparableWith(givenObject)){
+		if(!this.isSameClass(givenObject)){
 			return false;
 		}		
 		return this.isEqualFieldValues(givenObject);
@@ -140,26 +162,23 @@ public class BaseObject {
 	 * @return Boolean whether both objects have the same hashcode
 	 */
 	public boolean equalHash(Object givenObject){
-		if(!this.isComparableWith(givenObject)){
+		if(!this.isSameClass(givenObject)){
 			return false;
 		}		
 		return this.hashCode() == givenObject.hashCode();
 	}
 	
-	/** Checks if a given object is comparable with this object. <br>
-	 * Objects are not comparable if given object is null, primitive, 
-	 * wrapped primitive or not the same class.
+	/** Checks if given object is BaseObject or a subclass of BaseObject.
 	 * 
-	 * @param An object to compare with
-	 * @return Boolean if objects are not comparable
+	 * @param Given object to check for inheritance.
+	 * @return Boolean if given object is a BaseObject or subclass of BaseObject. 
 	 */
-	public boolean isComparableWith(Object givenObject){
-		if(givenObject == null || givenObject.getClass().isPrimitive()
-				|| isWrapperType(givenObject.getClass()) 
-				|| !this.isSameClass(givenObject)){
-				return false;
-			}
-		return true;
+	public boolean isBaseObjectSubclass(Object givenObject){
+	    // Class of given object cannot be null or primitive!
+		if(givenObject == null || givenObject.getClass().isPrimitive()){
+			return false;
+		}
+	    return givenObject instanceof BaseObject;
 	}
 	
 	/** Determines equality between two floating point numbers 
@@ -171,14 +190,14 @@ public class BaseObject {
 	 * @return Boolean whether both doubles are equal within error margin.
 	 */
 	public boolean flEq(double fl1, double fl2){
-		double errMar1 = (0.000001) * fl1;
-		double errMar2 = (0.000001) * fl2;
+		double errMar1 = (1/Math.pow(2, 26)) * fl1;
+		double errMar2 = (1/Math.pow(2, 26)) * fl2;
 		
 		return (Math.abs(fl1 - fl2) < errMar1 && Math.abs(fl1 - fl2) < errMar2);
 	}
 	
 	/** Basically a toString function.
-	 * 
+	 * @see #getObjectDetails(Object)
 	 * @return String containing fields of this object.
 	 */
 	public String getObjectDetails(){
@@ -204,6 +223,7 @@ public class BaseObject {
 
 	/** Returns a string consisting of class name and fields.
 	 * 
+	 * @param Given object to print field details from.
 	 * @return
 	 */
 	public String getObjectDetails(Object object) {
@@ -212,13 +232,17 @@ public class BaseObject {
 		sb.append("{");
 		List<Field> lf = getAllFields(object);
 		for(int i = 0; i < lf.size(); i++){
+			// Set field to be accessible
 			lf.get(i).setAccessible(true);	
 			try {
+				// Appends classtype fieldname = fieldvalue to string
 				sb.append(" " + lf.get(i).get(object).getClass().getSimpleName() 
 						+ " " 
 						+ lf.get(i).getName()  + " = " 
 						+ lf.get(i).get(object));
 				
+				// Recursively calls if field is not primitive or wrapper
+				// Keep an eye out for objects and arrays
 				if(!lf.get(i).get(object).getClass().isPrimitive() 
 						&& !isWrapperType(lf.get(i).get(object).getClass())){
 					sb.append(getObjectDetails(lf.get(i).get(object)));
