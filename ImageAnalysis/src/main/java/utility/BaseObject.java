@@ -34,79 +34,27 @@ public class BaseObject {
 	 */ 
 	@Override
 	public int hashCode(){
+		
 		return Objects.hash(this.getObjectDetails());
 	}
 	
-	/** Checks if given object is the same class as this object.
-	 * 
-	 * @param Object given
-	 * @return Boolean whether given object is the same class as this.
+	/** Checks if a given field is float or double.
+	 *
+	 * @param Given field
+	 * @return Boolean whether given field is float or double.
 	 */
-	private boolean isSameClass(Object givenObject){
-		return (givenObject.getClass().equals(this.getClass()));
-	}
-	
-	/** Checks if a given field that is primitive or wrapped primitive  of <br>
-	 * this object and the given object are equal in value.<br>
-	 * For floats and doubles, flEq is used.
-	 * For all other primitives, .equals is used.
-	 * 
-	 * @see #flEq(double, double)
-	 * @param Given field (primitive or wrapped primitive)
-	 * @param Given object whose given field is to be compared with that of this 
-	 * object
-	 * @return Boolean whether given primitive field is equal for both objects.
-	 */
-	private boolean isEqualPrimitiveValue(Field field, Object givenObject){
+	private boolean isFloatingPoint(Field field){
 		field.setAccessible(true);
 		try{
-			// If field type is float or double, compare values with flEq.
-			if(field.getGenericType() == float.class 
+			// Return true if given field is float or double.
+			return (field.getGenericType() == float.class 
 					|| field.getGenericType() == double.class
 					|| field.getGenericType() == Float.class
-					|| field.getGenericType() == Double.class){
-				return (flEq(field.getDouble(this), field.getDouble(givenObject)));
-			}
-			else{
-				return field.get(this).equals(field.get(givenObject));
-			}
-		} catch (IllegalArgumentException | IllegalAccessException e) {
+					|| field.getGenericType() == Double.class);
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return false;
 		}
-	}
-	
-	// to do: add checking for list/arraylist fields (order-sensitive)
-	// to do: add checking for array fields
-	// actually those should be impossible lol too many possibilities
-	/**
-	 * 
-	 * @param Given object for comparison with this object.
-	 * @return Boolean whether both objects are equal
-	 */
-	private boolean isEqualFieldValues(Object givenObject){
-		
-		List<Field> givenFA = this.getAllFields(givenObject);
-
-		for(int i = 0; i < givenFA.size(); i++){
-			givenFA.get(i).setAccessible(true);
-			try {
-				if(givenFA.get(i).get(this).getClass().isPrimitive() 
-						|| isWrapperType(givenFA.get(i).get(this).getClass())){
-					if(!isEqualPrimitiveValue(givenFA.get(i), givenObject)){
-						return false;
-					}
-				}
-				else {
-					if(!givenFA.get(i).get(this).equals(givenFA.get(i).get(givenObject))){
-							return false;
-					}
-				}
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-		return true;
 	}
 	
 	/** Get list of all fields in this object, including those inherited from
@@ -119,7 +67,8 @@ public class BaseObject {
 	}
 	
 	/** Get list of all fields in the given object, including those inherited from
-	 * superclasses.
+	 * superclasses.				<br>
+	 * Not recommended for anything other than objects of BaseObject descent.
 	 * 
 	 * @param Given object
 	 * @return List of fields in given object
@@ -131,7 +80,7 @@ public class BaseObject {
 	    Class<?> i = object.getClass();
 	    // Class of given object cannot be null, Object, primitive or wrapped prim!
 	    while (i != null && i != Object.class && !i.isPrimitive()
-	    		&& !isWrapperType(i) && i != Collections.class && i != List.class) {
+	    		&& !isWrapperType(i)) {
 	        Collections.addAll(result, i.getDeclaredFields());
 	        i = i.getSuperclass();
 	    }
@@ -139,7 +88,6 @@ public class BaseObject {
 	}
 
 	/** Reimplementation of equals for objects extending BaseObject. <br>
-	 * Checks for equality of field values rather than memory location. <br>
 	 * If a field is floating point (float or double), checks equality with flEq.
 	 * <br>
 	 * Two equal BaseObject-descendants may not have the same hashcode if
@@ -150,10 +98,38 @@ public class BaseObject {
 	 */
 	@Override
 	public boolean equals(Object givenObject){
-		if(!this.isSameClass(givenObject)){
+		// Reject if given object is null or type not same
+		if(givenObject == null || !givenObject.getClass().equals(this.getClass())){
 			return false;
 		}		
-		return this.isEqualFieldValues(givenObject);
+		// Get all declared fields of this object
+		List<Field> thisFields = this.getAllFields();
+
+		Field field = null;
+		// Iterate through each field
+		for(int i = 0; i < thisFields.size(); i++){
+			field = thisFields.get(i);
+			// Set accessible so private vars can also be compared
+			field.setAccessible(true);
+			try {
+				// if field is a float/double, use flEq
+				if(isFloatingPoint(field) && 
+						!flEq(field.getDouble(this), field.getDouble(givenObject))){
+					return false;
+				}
+				else {
+					// call .equals, which should act as normal for other types
+					// for BaseObject descents, this overriding .equals is invoked
+					if(!field.get(this).equals(field.get(givenObject))){
+							return false;
+					}
+				}
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/** Checks if two objects have the same hash.
@@ -162,23 +138,11 @@ public class BaseObject {
 	 * @return Boolean whether both objects have the same hashcode
 	 */
 	public boolean equalHash(Object givenObject){
-		if(!this.isSameClass(givenObject)){
+		// Reject if type not same
+		if(givenObject.getClass().equals(this.getClass())){
 			return false;
 		}		
 		return this.hashCode() == givenObject.hashCode();
-	}
-	
-	/** Checks if given object is BaseObject or a subclass of BaseObject.
-	 * 
-	 * @param Given object to check for inheritance.
-	 * @return Boolean if given object is a BaseObject or subclass of BaseObject. 
-	 */
-	public boolean isBaseObjectSubclass(Object givenObject){
-	    // Class of given object cannot be null or primitive!
-		if(givenObject == null || givenObject.getClass().isPrimitive()){
-			return false;
-		}
-	    return givenObject instanceof BaseObject;
 	}
 	
 	/** Determines equality between two floating point numbers 
@@ -231,18 +195,18 @@ public class BaseObject {
 		
 		sb.append("{");
 		List<Field> lf = getAllFields(object);
+		Field field = null;
 		for(int i = 0; i < lf.size(); i++){
+			field = lf.get(i);
 			// Set field to be accessible
-			lf.get(i).setAccessible(true);	
+			field.setAccessible(true);	
 			try {
 				// Appends classtype fieldname = fieldvalue to string
-				sb.append(" " + lf.get(i).get(object).getClass().getSimpleName() 
-						+ " " 
-						+ lf.get(i).getName()  + " = " 
-						+ lf.get(i).get(object));
+				sb.append(field.get(object).getClass().getSimpleName()  
+						+ " " + field.getName()  + "=" 
+						+ field.get(object));
 				
 				// Recursively calls if field is not primitive or wrapper
-				// Keep an eye out for objects and arrays
 				if(!lf.get(i).get(object).getClass().isPrimitive() 
 						&& !isWrapperType(lf.get(i).get(object).getClass())){
 					sb.append(getObjectDetails(lf.get(i).get(object)));
